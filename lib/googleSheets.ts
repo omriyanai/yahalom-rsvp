@@ -17,6 +17,7 @@ export interface Event {
   name: string
   date: string
   time: string
+  endtime: string
   location: string
   address: string
   description: string
@@ -28,7 +29,7 @@ export async function getEvents(): Promise<Event[]> {
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: 'Events!A2:H200',
+    range: 'Events!A2:I200',
   })
 
   const rows = response.data.values || []
@@ -48,6 +49,7 @@ export async function getEvents(): Promise<Event[]> {
       name: row[1] || '',
       date: row[2] || '',
       time: row[3] || '',
+      endtime: row[8] || '',
       location: row[4] || '',
       address: row[5] || '',
       description: row[6] || '',

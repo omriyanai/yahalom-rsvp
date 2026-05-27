@@ -7,9 +7,16 @@ import type { Event } from '@/lib/googleSheets'
 function buildCalendarUrl(event: Event): string {
   const dateClean = event.date.replace(/-/g, '')
   const [h, m] = event.time.split(':')
-  const endHour = String(parseInt(h) + 2).padStart(2, '0')
   const start = `${dateClean}T${h}${m}00`
-  const end = `${dateClean}T${endHour}${m}00`
+  // Use endtime from sheet if provided, otherwise default to +2 hours
+  let end: string
+  if (event.endtime && event.endtime.includes(':')) {
+    const [eh, em] = event.endtime.split(':')
+    end = `${dateClean}T${eh}${em}00`
+  } else {
+    const endHour = String(parseInt(h) + 2).padStart(2, '0')
+    end = `${dateClean}T${endHour}${m}00`
+  }
   return (
     `https://calendar.google.com/calendar/render?action=TEMPLATE` +
     `&text=${encodeURIComponent(event.name)}` +
