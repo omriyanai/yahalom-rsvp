@@ -39,7 +39,7 @@ export async function getEvents(): Promise<Event[]> {
   return rows
     .filter((row) => {
       if (!row[0] || !row[2]) return false
-      if (row[8] === 'FALSE') return false
+      if (row[7] === 'FALSE') return false
       const eventDate = new Date(row[2])
       return eventDate >= today
     })
@@ -49,10 +49,10 @@ export async function getEvents(): Promise<Event[]> {
       name: row[1] || '',
       date: row[2] || '',
       time: row[3] || '',
-      endtime: row[4] || '',
-      location: row[5] || '',
-      address: row[6] || '',
-      description: row[7] || '',
+      location: row[4] || '',
+      address: row[5] || '',
+      description: row[6] || '',
+      endtime: row[8] || '',
     }))
 }
 
