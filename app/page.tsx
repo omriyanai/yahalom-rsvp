@@ -2,7 +2,7 @@ import Header from '@/components/Header'
 import EventCard from '@/components/EventCard'
 import { getEvents } from '@/lib/googleSheets'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   let events: Awaited<ReturnType<typeof getEvents>> = []
