@@ -4,19 +4,27 @@ import { useState } from 'react'
 import RSVPForm from './RSVPForm'
 import type { Event } from '@/lib/googleSheets'
 
-function buildCalendarUrl(event: Event): string {
+function getEndTime(event: Event): { compact: string; iso: string } {
+  const [h, m] = event.time.split(':')
+  if (event.endtime && event.endtime.includes(':')) {
+    const [eh, em] = event.endtime.split(':')
+    return {
+      compact: `${event.date.replace(/-/g, '')}T${eh}${em}00`,
+      iso: `${event.date}T${eh}:${em}:00`,
+    }
+  }
+  const endHour = String(parseInt(h) + 2).padStart(2, '0')
+  return {
+    compact: `${event.date.replace(/-/g, '')}T${endHour}${m}00`,
+    iso: `${event.date}T${endHour}:${m}:00`,
+  }
+}
+
+function buildGoogleCalendarUrl(event: Event): string {
   const dateClean = event.date.replace(/-/g, '')
   const [h, m] = event.time.split(':')
   const start = `${dateClean}T${h}${m}00`
-  // Use endtime from sheet if provided, otherwise default to +2 hours
-  let end: string
-  if (event.endtime && event.endtime.includes(':')) {
-    const [eh, em] = event.endtime.split(':')
-    end = `${dateClean}T${eh}${em}00`
-  } else {
-    const endHour = String(parseInt(h) + 2).padStart(2, '0')
-    end = `${dateClean}T${endHour}${m}00`
-  }
+  const { compact: end } = getEndTime(event)
   return (
     `https://calendar.google.com/calendar/render?action=TEMPLATE` +
     `&text=${encodeURIComponent(event.name)}` +
@@ -24,6 +32,20 @@ function buildCalendarUrl(event: Event): string {
     `&location=${encodeURIComponent(event.address || event.location)}` +
     `&details=${encodeURIComponent(event.description)}` +
     `&ctz=Asia%2FJerusalem`
+  )
+}
+
+function buildOutlookCalendarUrl(event: Event): string {
+  const [h, m] = event.time.split(':')
+  const startIso = `${event.date}T${h}:${m}:00`
+  const { iso: endIso } = getEndTime(event)
+  return (
+    `https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent` +
+    `&subject=${encodeURIComponent(event.name)}` +
+    `&startdt=${encodeURIComponent(startIso)}` +
+    `&enddt=${encodeURIComponent(endIso)}` +
+    `&location=${encodeURIComponent(event.address || event.location)}` +
+    `&body=${encodeURIComponent(event.description)}`
   )
 }
 
@@ -42,7 +64,8 @@ export default function EventCard({ event }: { event: Event }) {
   const [submitted, setSubmitted] = useState(false)
 
   const wazeUrl = `https://www.waze.com/ul?q=${encodeURIComponent(event.address || event.location)}&navigate=yes`
-  const calendarUrl = buildCalendarUrl(event)
+  const googleCalendarUrl = buildGoogleCalendarUrl(event)
+  const outlookCalendarUrl = buildOutlookCalendarUrl(event)
 
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
@@ -88,12 +111,20 @@ export default function EventCard({ event }: { event: Event }) {
             ניווט ב-Waze
           </a>
           <a
-            href={calendarUrl}
+            href={googleCalendarUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-xl text-sm font-bold hover:opacity-90 transition shadow-sm"
           >
-            📆 הוסף ליומן
+            📆 Google Calendar
+          </a>
+          <a
+            href={outlookCalendarUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-[#0078D4] text-white px-4 py-2 rounded-xl text-sm font-bold hover:opacity-90 transition shadow-sm"
+          >
+            📅 Outlook
           </a>
         </div>
 
