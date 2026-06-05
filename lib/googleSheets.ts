@@ -12,6 +12,34 @@ function getAuth() {
   })
 }
 
+export interface Member {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+}
+
+export async function getMemberByEmail(email: string): Promise<Member | null> {
+  const auth = await getAuth()
+  const sheets = google.sheets({ version: 'v4', auth })
+
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'Members!A2:D200',
+  })
+
+  const rows = response.data.values || []
+  const row = rows.find((r) => r[3]?.toLowerCase() === email.toLowerCase())
+  if (!row) return null
+
+  return {
+    id: row[0] || '',
+    firstName: row[1] || '',
+    lastName: row[2] || '',
+    email: row[3] || '',
+  }
+}
+
 export interface Event {
   id: string
   name: string

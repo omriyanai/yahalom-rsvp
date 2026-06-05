@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import RSVPForm from './RSVPForm'
-import type { Event } from '@/lib/googleSheets'
+import type { Event, Member } from '@/lib/googleSheets'
 
 function getEndTime(event: Event): { compact: string; iso: string } {
   const [h, m] = event.time.split(':')
@@ -59,13 +59,38 @@ function formatHebrewDate(dateStr: string): string {
   })
 }
 
-export default function EventCard({ event }: { event: Event }) {
+export default function EventCard({ event, member }: { event: Event; member: Member }) {
   const [showForm, setShowForm] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [attending, setAttending] = useState<'yes' | 'no' | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const wazeUrl = `https://www.waze.com/ul?q=${encodeURIComponent(event.address || event.location)}&navigate=yes`
   const googleCalendarUrl = buildGoogleCalendarUrl(event)
   const outlookCalendarUrl = buildOutlookCalendarUrl(event)
+
+  const handleQuickRSVP = async (choice: 'yes' | 'no') => {
+    setLoading(true)
+    setAttending(choice)
+    try {
+      await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventId: event.id,
+          eventName: event.name,
+          name: `${member.firstName} ${member.lastName}`,
+          email: member.email,
+          attending: choice,
+        }),
+      })
+      setSubmitted(true)
+    } catch {
+      setAttending(null)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
@@ -129,27 +154,38 @@ export default function EventCard({ event }: { event: Event }) {
         </div>
 
         {submitted ? (
-          <div className="bg-green-50 border-2 border-green-200 rounded-xl p-5 text-center">
-            <p className="text-green-700 font-bold text-xl">✓ תודה! נתראה בקרוב</p>
+          <div className={`border-2 rounded-xl p-5 text-center ${attending === 'yes' ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
+            <p className={`font-bold text-xl ${attending === 'yes' ? 'text-green-700' : 'text-gray-500'}`}>
+              {attending === 'yes' ? '✓ תודה! נתראה בקרוב 🎉' : 'הרשמנו שלא תגיע. תודה על העדכון'}
+            </p>
           </div>
+        ) : !showForm ? (
+          <button
+            onClick={() => setShowForm(true)}
+            className="w-full bg-yahalom-red text-white py-3.5 rounded-xl font-bold text-lg hover:bg-red-800 transition shadow-sm"
+          >
+            אישור הגעה לאירוע
+          </button>
         ) : (
-          <>
-            {!showForm ? (
+          <div className="border-t border-gray-100 pt-4">
+            <p className="text-sm text-gray-500 text-center mb-3">האם תגיע?</p>
+            <div className="flex gap-3">
               <button
-                onClick={() => setShowForm(true)}
-                className="w-full bg-yahalom-red text-white py-3.5 rounded-xl font-bold text-lg hover:bg-red-800 transition shadow-sm"
+                onClick={() => handleQuickRSVP('yes')}
+                disabled={loading}
+                className="flex-1 bg-green-500 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-600 transition disabled:opacity-50 shadow-sm"
               >
-                אישור הגעה לאירוע
+                {loading && attending === 'yes' ? '...' : 'כן, מגיע ✓'}
               </button>
-            ) : (
-              <RSVPForm
-                eventId={event.id}
-                eventName={event.name}
-                onSuccess={() => setSubmitted(true)}
-                onCancel={() => setShowForm(false)}
-              />
-            )}
-          </>
+              <button
+                onClick={() => handleQuickRSVP('no')}
+                disabled={loading}
+                className="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-bold text-lg hover:bg-gray-300 transition disabled:opacity-50 shadow-sm"
+              >
+                {loading && attending === 'no' ? '...' : 'לא מגיע ✗'}
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

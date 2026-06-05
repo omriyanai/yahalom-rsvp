@@ -1,12 +1,25 @@
+import { cookies } from 'next/headers'
 import Header from '@/components/Header'
 import EventCard from '@/components/EventCard'
-import { getEvents } from '@/lib/googleSheets'
+import SignIn from '@/components/SignIn'
+import { getEvents, type Member } from '@/lib/googleSheets'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  let events: Awaited<ReturnType<typeof getEvents>> = []
+  const cookieStore = cookies()
+  const memberCookie = cookieStore.get('yahalom_member')
 
+  if (!memberCookie) return <SignIn />
+
+  let member: Member
+  try {
+    member = JSON.parse(memberCookie.value)
+  } catch {
+    return <SignIn />
+  }
+
+  let events: Awaited<ReturnType<typeof getEvents>> = []
   try {
     events = await getEvents()
   } catch (e) {
@@ -15,7 +28,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      <Header />
+      <Header member={member} />
       <div className="max-w-2xl mx-auto px-4 py-10">
         <h2 className="text-2xl font-bold text-yahalom-dark text-center mb-8 tracking-tight">
           אירועים קרובים
@@ -29,7 +42,7 @@ export default async function Home() {
         ) : (
           <div className="space-y-8">
             {events.map((event) => (
-              <EventCard key={event.id} event={event} />
+              <EventCard key={event.id} event={event} member={member} />
             ))}
           </div>
         )}

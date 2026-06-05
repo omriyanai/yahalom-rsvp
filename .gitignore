@@ -1,3 +1,8 @@
+*.json.key
+*.rtf
+*-credentials.json
+*serviceaccount*.json
+yahalom-rsvp-*.json
 /node_modules
 /.next/
 /out/
