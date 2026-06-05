@@ -45,7 +45,7 @@ export default function SignIn() {
             style={{ height: 'auto', width: 'auto' }}
             priority
           />
-          <p className="text-yahalom-gray text-sm mt-3 font-medium">תכנית חונכות</p>
+          <p className="text-yahalom-gray text-sm mt-3 font-medium">תוכנית מנטורינג</p>
         </div>
 
         <h1 className="text-xl font-bold text-yahalom-dark text-center mb-1">ברוכים הבאים</h1>

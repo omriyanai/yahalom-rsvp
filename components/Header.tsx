@@ -14,17 +14,17 @@ export default function Header({ member }: { member?: Member }) {
           priority
         />
         <p className="text-yahalom-gray text-sm font-medium tracking-wide">
-          תכנית חונכות | אישור הגעה לאירועים
+          תוכנית מנטורינג | אישור הגעה לאירועים
         </p>
         {member && (
           <div className="flex items-center gap-3 mt-1">
             <span className="text-yahalom-dark font-semibold text-sm">
               שלום, {member.firstName} {member.lastName} 👋
             </span>
-            <a
-              href="/api/signout"
-              className="text-xs text-gray-400 hover:text-yahalom-red underline transition"
-            >
+            <a href="/admin" className="text-xs text-yahalom-red hover:underline transition font-medium">
+              רשימות נוכחות
+            </a>
+            <a href="/api/signout" className="text-xs text-gray-400 hover:text-yahalom-red underline transition">
               התנתקות
             </a>
           </div>

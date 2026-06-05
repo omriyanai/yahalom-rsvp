@@ -19,6 +19,45 @@ export interface Member {
   email: string
 }
 
+export async function getMembers(): Promise<Member[]> {
+  const auth = await getAuth()
+  const sheets = google.sheets({ version: 'v4', auth })
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'Members!A2:D200',
+  })
+  return (response.data.values || [])
+    .filter((row) => row[0])
+    .map((row) => ({
+      id: row[0] || '',
+      firstName: row[1] || '',
+      lastName: row[2] || '',
+      email: row[3] || '',
+    }))
+}
+
+export interface RSVPRecord {
+  eventId: string
+  email: string
+  attending: string
+}
+
+export async function getAllRSVPs(): Promise<RSVPRecord[]> {
+  const auth = await getAuth()
+  const sheets = google.sheets({ version: 'v4', auth })
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'RSVPs!A2:F2000',
+  })
+  return (response.data.values || [])
+    .filter((row) => row[1])
+    .map((row) => ({
+      eventId: row[1] || '',
+      email: row[4] || '',
+      attending: row[5] || '',
+    }))
+}
+
 export async function getMemberByEmail(email: string): Promise<Member | null> {
   const auth = await getAuth()
   const sheets = google.sheets({ version: 'v4', auth })
