@@ -19,6 +19,12 @@ export default async function Home() {
     return <SignIn />
   }
 
+  // If cookie is old (missing category), force re-login to get fresh data
+  if (!member.category) {
+    cookieStore.delete('yahalom_member')
+    return <SignIn />
+  }
+
   let events: Awaited<ReturnType<typeof getEvents>> = []
   try {
     const all = await getEvents()

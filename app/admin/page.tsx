@@ -78,6 +78,11 @@ export default async function AdminPage() {
   try { member = JSON.parse(memberCookie.value) }
   catch { return <SignIn /> }
 
+  if (!member.category) {
+    cookieStore.delete('yahalom_member')
+    return <SignIn />
+  }
+
   if (member.category !== 'צוות') redirect('/')
 
   const [events, members, rsvps] = await Promise.all([
