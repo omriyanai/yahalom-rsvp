@@ -21,9 +21,11 @@ export default function Header({ member }: { member?: Member }) {
             <span className="text-yahalom-dark font-semibold text-sm">
               שלום, {member.firstName} {member.lastName} 👋
             </span>
-            <a href="/admin" className="text-xs text-yahalom-red hover:underline transition font-medium">
-              רשימות נוכחות
-            </a>
+            {member.category === 'צוות' && (
+              <a href="/admin" className="text-xs text-yahalom-red hover:underline transition font-medium">
+                רשימות נוכחות
+              </a>
+            )}
             <a href="/api/signout" className="text-xs text-gray-400 hover:text-yahalom-red underline transition">
               התנתקות
             </a>

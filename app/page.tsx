@@ -21,7 +21,12 @@ export default async function Home() {
 
   let events: Awaited<ReturnType<typeof getEvents>> = []
   try {
-    events = await getEvents()
+    const all = await getEvents()
+    events = all.filter(e =>
+      member.category === 'צוות' ||   // staff sees everything
+      e.categories.length === 0 ||     // no filter set = everyone
+      e.categories.includes(member.category)
+    )
   } catch (e) {
     console.error('Failed to load events:', e)
   }
