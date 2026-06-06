@@ -39,9 +39,12 @@ function CategorySection({ cat, members, latestByEmail }: {
   const inCat    = members.filter(m => m.category === cat)
   if (inCat.length === 0) return null
 
-  const attending    = inCat.filter(m => latestByEmail.get(m.email.toLowerCase()) === '✓ מגיע')
-  const notAttending = inCat.filter(m => latestByEmail.get(m.email.toLowerCase()) === '✗ לא מגיע')
-  const noResponse   = inCat.filter(m => !latestByEmail.has(m.email.toLowerCase()))
+  const key = (email: string) => email.trim().toLowerCase()
+  const status = (m: Member) => latestByEmail.get(key(m.email)) ?? ''
+
+  const attending    = inCat.filter(m => status(m).includes('מגיע') && !status(m).includes('לא'))
+  const notAttending = inCat.filter(m => status(m).includes('לא מגיע'))
+  const noResponse   = inCat.filter(m => !latestByEmail.has(key(m.email)))
 
   return (
     <div className="border-t border-gray-100 pt-4 mt-4">

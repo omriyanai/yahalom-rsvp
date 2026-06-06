@@ -29,8 +29,8 @@ function parseMembers(rows: string[][]): Member[] {
       id:        row[0] || '',
       firstName: row[1] || '',
       lastName:  row[2] || '',
-      email:     row[3] || '',
-      category:  row[4] || '',
+      email:     (row[3] || '').trim(),
+      category:  (row[4] || '').trim(),
     }))
 }
 
@@ -123,9 +123,9 @@ export async function getAllRSVPs(): Promise<RSVPRecord[]> {
   return (response.data.values || [])
     .filter((row) => row[1])
     .map((row) => ({
-      eventId:   row[1] || '',
-      email:     row[4] || '',
-      attending: row[5] || '',
+      eventId:   (row[1] || '').trim(),
+      email:     (row[4] || '').trim(),
+      attending: (row[5] || '').trim(),
     }))
 }
 
