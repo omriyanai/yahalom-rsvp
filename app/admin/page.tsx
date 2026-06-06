@@ -31,20 +31,18 @@ function NameList({ members }: { members: Member[] }) {
   )
 }
 
-function CategorySection({ cat, members, latestByEmail }: {
+function CategorySection({ cat, members, getStatus, hasRSVP }: {
   cat: string
   members: Member[]
-  latestByEmail: Map<string, string>
+  getStatus: (m: Member) => string
+  hasRSVP: (m: Member) => boolean
 }) {
   const inCat    = members.filter(m => m.category === cat)
   if (inCat.length === 0) return null
 
-  const key = (email: string) => email.trim().toLowerCase()
-  const status = (m: Member) => latestByEmail.get(key(m.email)) ?? ''
-
-  const attending    = inCat.filter(m => status(m).includes('מגיע') && !status(m).includes('לא'))
-  const notAttending = inCat.filter(m => status(m).includes('לא מגיע'))
-  const noResponse   = inCat.filter(m => !latestByEmail.has(key(m.email)))
+  const attending    = inCat.filter(m => { const s = getStatus(m); return s.includes('מגיע') && !s.includes('לא') })
+  const notAttending = inCat.filter(m => getStatus(m).includes('לא מגיע'))
+  const noResponse   = inCat.filter(m => !hasRSVP(m))
 
   return (
     <div className="border-t border-gray-100 pt-4 mt-4">
@@ -104,12 +102,22 @@ export default async function AdminPage() {
 
         <div className="space-y-8">
           {events.map((event) => {
-            // latest RSVP per email for this event
-            const latestByEmail = new Map<string, string>()
+            // latest RSVP per email OR full name for this event
+            const byEmail = new Map<string, string>()
+            const byName  = new Map<string, string>()
             for (const r of rsvps) {
-              if (r.eventId === event.id)
-                latestByEmail.set(r.email.toLowerCase(), r.attending)
+              if (r.eventId === event.id) {
+                if (r.email) byEmail.set(r.email.trim().toLowerCase(), r.attending)
+                if (r.name)  byName.set(r.name.trim(), r.attending)
+              }
             }
+            const getStatus = (m: Member) =>
+              byEmail.get(m.email.trim().toLowerCase()) ||
+              byName.get(`${m.firstName} ${m.lastName}`.trim()) ||
+              ''
+            const hasRSVP = (m: Member) =>
+              byEmail.has(m.email.trim().toLowerCase()) ||
+              byName.has(`${m.firstName} ${m.lastName}`.trim())
 
             // which categories are invited to this event
             const invitedCats = event.categories.length > 0
@@ -121,9 +129,7 @@ export default async function AdminPage() {
               invitedCats.includes(m.category)
             )
 
-            const totalAnswered = invitedMembers.filter(m =>
-              latestByEmail.has(m.email.toLowerCase())
-            ).length
+            const totalAnswered = invitedMembers.filter(m => hasRSVP(m)).length
 
             return (
               <div key={event.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
@@ -144,7 +150,8 @@ export default async function AdminPage() {
                       key={cat}
                       cat={cat}
                       members={invitedMembers}
-                      latestByEmail={latestByEmail}
+                      getStatus={getStatus}
+                      hasRSVP={hasRSVP}
                     />
                   ))}
                 </div>

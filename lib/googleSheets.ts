@@ -109,6 +109,7 @@ export async function getEvents(): Promise<Event[]> {
 
 export interface RSVPRecord {
   eventId: string
+  name: string
   email: string
   attending: string
 }
@@ -124,6 +125,7 @@ export async function getAllRSVPs(): Promise<RSVPRecord[]> {
     .filter((row) => row[1])
     .map((row) => ({
       eventId:   (row[1] || '').trim(),
+      name:      (row[3] || '').trim(),
       email:     (row[4] || '').trim(),
       attending: (row[5] || '').trim(),
     }))
