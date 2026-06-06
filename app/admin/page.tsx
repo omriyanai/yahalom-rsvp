@@ -97,7 +97,10 @@ export default async function AdminPage() {
 
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-yahalom-dark">סטטוס אישורי הגעה</h2>
-          <Link href="/" className="text-sm text-yahalom-red hover:underline font-medium">← חזרה לאירועים</Link>
+          <div className="flex gap-4">
+            <Link href="/admin/audit" className="text-sm text-yellow-600 hover:underline font-medium">🔍 בדיקת נתונים</Link>
+            <Link href="/" className="text-sm text-yahalom-red hover:underline font-medium">← חזרה לאירועים</Link>
+          </div>
         </div>
 
         <div className="space-y-8">
