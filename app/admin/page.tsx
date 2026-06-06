@@ -3,16 +3,18 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import SignIn from '@/components/SignIn'
-import { getEvents, getMembers, getAllRSVPs, type Member, type Event } from '@/lib/googleSheets'
+import AdminOverrideButton from '@/components/AdminOverrideButton'
+import {
+  getEvents, getMembers, getAllRSVPs, getAdminOverrides,
+  type Member, type RSVPRecord, type AdminOverride,
+} from '@/lib/googleSheets'
 
 export const dynamic = 'force-dynamic'
 
 const CATEGORY_ORDER = ['מנטור', 'מנטי', 'צוות']
-const CATEGORY_LABEL: Record<string, string> = {
-  'מנטור': 'מנטורים',
-  'מנטי':  'מנטיים',
-  'צוות':  'צוות',
-}
+const CATEGORY_LABEL: Record<string, string> = { 'מנטור': 'מנטורים', 'מנטי': 'מנטיים', 'צוות': 'צוות' }
+
+const norm = (s: string) => s.trim().replace(/\s+/g, ' ')
 
 function formatHebrewDate(dateStr: string) {
   return new Date(dateStr + 'T00:00:00').toLocaleDateString('he-IL', {
@@ -20,53 +22,71 @@ function formatHebrewDate(dateStr: string) {
   })
 }
 
-function NameList({ members }: { members: Member[] }) {
-  if (members.length === 0) return <p className="text-xs text-gray-300 italic">—</p>
-  return (
-    <ul className="space-y-0.5">
-      {members.map(m => (
-        <li key={m.id} className="text-sm text-gray-700">{m.firstName} {m.lastName}</li>
-      ))}
-    </ul>
-  )
+type StatusSource = 'email' | 'name' | 'admin' | 'none'
+interface MemberStatus {
+  attending: boolean | null
+  source: StatusSource
+  adminName?: string
 }
 
-function CategorySection({ cat, members, getStatus, hasRSVP }: {
-  cat: string
-  members: Member[]
-  getStatus: (m: Member) => string
-  hasRSVP: (m: Member) => boolean
-}) {
-  const inCat    = members.filter(m => m.category === cat)
-  if (inCat.length === 0) return null
+function computeStatus(
+  member: Member,
+  rsvps: RSVPRecord[],
+  overrides: AdminOverride[],
+  eventId: string
+): MemberStatus {
+  // Admin override wins — take latest (last entry)
+  const override = [...overrides].reverse().find(o =>
+    o.eventId === eventId && (
+      norm(o.memberEmail).toLowerCase() === norm(member.email).toLowerCase() ||
+      norm(o.memberName) === norm(`${member.firstName} ${member.lastName}`)
+    )
+  )
+  if (override) return {
+    attending: override.attending === 'מגיע',
+    source: 'admin',
+    adminName: override.adminName,
+  }
 
-  const attending    = inCat.filter(m => { const s = getStatus(m); return s.includes('מגיע') && !s.includes('לא') })
-  const notAttending = inCat.filter(m => getStatus(m).includes('לא מגיע'))
-  const noResponse   = inCat.filter(m => !hasRSVP(m))
+  // Member RSVP — email match first
+  const eventRSVPs = rsvps.filter(r => r.eventId === eventId)
+  const byEmail = eventRSVPs.find(r => norm(r.email).toLowerCase() === norm(member.email).toLowerCase())
+  if (byEmail) return {
+    attending: byEmail.attending.includes('מגיע') && !byEmail.attending.includes('לא'),
+    source: 'email',
+  }
 
+  // Name match fallback
+  const byName = eventRSVPs.find(r => norm(r.name) === norm(`${member.firstName} ${member.lastName}`))
+  if (byName) return {
+    attending: byName.attending.includes('מגיע') && !byName.attending.includes('לא'),
+    source: 'name',
+  }
+
+  return { attending: null, source: 'none' }
+}
+
+function StatusBadge({ status }: { status: MemberStatus }) {
+  if (status.attending === null) {
+    return <span className="text-xs text-gray-400">טרם ענה ⏳</span>
+  }
+  if (status.attending) {
+    return (
+      <span className="text-xs text-green-700 font-medium">
+        ✓ מגיע
+        {status.source === 'admin' && (
+          <span className="mr-1 text-green-500 font-normal">(ע"י {status.adminName} 👤)</span>
+        )}
+      </span>
+    )
+  }
   return (
-    <div className="border-t border-gray-100 pt-4 mt-4">
-      <p className="text-xs font-bold text-yahalom-gray uppercase tracking-widest mb-3">
-        {CATEGORY_LABEL[cat] || cat}
-        <span className="font-normal mr-2 text-gray-400">
-          ({attending.length + notAttending.length}/{inCat.length} ענו)
-        </span>
-      </p>
-      <div className="grid grid-cols-3 gap-3">
-        <div className="bg-green-50 rounded-xl p-3">
-          <p className="text-xs font-bold text-green-700 mb-2">מגיע ✓ ({attending.length})</p>
-          <NameList members={attending} />
-        </div>
-        <div className="bg-red-50 rounded-xl p-3">
-          <p className="text-xs font-bold text-red-600 mb-2">לא מגיע ✗ ({notAttending.length})</p>
-          <NameList members={notAttending} />
-        </div>
-        <div className="bg-gray-50 rounded-xl p-3">
-          <p className="text-xs font-bold text-gray-500 mb-2">טרם ענו ⏳ ({noResponse.length})</p>
-          <NameList members={noResponse} />
-        </div>
-      </div>
-    </div>
+    <span className="text-xs text-red-500 font-medium">
+      ✗ לא מגיע
+      {status.source === 'admin' && (
+        <span className="mr-1 text-red-400 font-normal">(ע"י {status.adminName} 👤)</span>
+      )}
+    </span>
   )
 }
 
@@ -75,24 +95,20 @@ export default async function AdminPage() {
   const memberCookie = cookieStore.get('yahalom_member')
   if (!memberCookie) return <SignIn />
 
-  let member: Member
-  try { member = JSON.parse(memberCookie.value) }
+  let admin: Member
+  try { admin = JSON.parse(memberCookie.value) }
   catch { return <SignIn /> }
 
-  if (!member.category) {
-    cookieStore.delete('yahalom_member')
-    return <SignIn />
-  }
+  if (!admin.category) { cookieStore.delete('yahalom_member'); return <SignIn /> }
+  if (admin.category !== 'צוות') redirect('/')
 
-  if (member.category !== 'צוות') redirect('/')
-
-  const [events, members, rsvps] = await Promise.all([
-    getEvents(), getMembers(), getAllRSVPs(),
+  const [events, members, rsvps, overrides] = await Promise.all([
+    getEvents(), getMembers(), getAllRSVPs(), getAdminOverrides(),
   ])
 
   return (
     <main className="min-h-screen bg-gray-100">
-      <Header member={member} />
+      <Header member={admin} />
       <div className="max-w-3xl mx-auto px-4 py-10">
 
         <div className="flex items-center justify-between mb-8">
@@ -105,40 +121,22 @@ export default async function AdminPage() {
 
         <div className="space-y-8">
           {events.map((event) => {
-            // latest RSVP per email OR full name for this event
-            const byEmail = new Map<string, string>()
-            const byName  = new Map<string, string>()
-            for (const r of rsvps) {
-              if (r.eventId === event.id) {
-                if (r.email) byEmail.set(r.email.trim().toLowerCase(), r.attending)
-                if (r.name)  byName.set(r.name.trim(), r.attending)
-              }
-            }
-            const getStatus = (m: Member) =>
-              byEmail.get(m.email.trim().toLowerCase()) ||
-              byName.get(`${m.firstName} ${m.lastName}`.trim()) ||
-              ''
-            const hasRSVP = (m: Member) =>
-              byEmail.has(m.email.trim().toLowerCase()) ||
-              byName.has(`${m.firstName} ${m.lastName}`.trim())
-
-            // which categories are invited to this event
             const invitedCats = event.categories.length > 0
               ? CATEGORY_ORDER.filter(c => event.categories.includes(c))
               : CATEGORY_ORDER
+            const invitedMembers = members.filter(m => invitedCats.includes(m.category))
 
-            // filter members to only those invited
-            const invitedMembers = members.filter(m =>
-              invitedCats.includes(m.category)
-            )
+            const statuses = new Map(invitedMembers.map(m => [
+              m.id, computeStatus(m, rsvps, overrides, event.id)
+            ]))
 
-            const totalAnswered = invitedMembers.filter(m => hasRSVP(m)).length
+            const totalAnswered = invitedMembers.filter(m => statuses.get(m.id)?.attending !== null).length
 
             return (
               <div key={event.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
                 <div className="h-1.5 bg-yahalom-red" />
                 <div className="p-6">
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-lg font-bold text-yahalom-dark mb-1">{event.name}</h3>
                       <p className="text-sm text-gray-400">{formatHebrewDate(event.date)} | {event.time}</p>
@@ -148,15 +146,42 @@ export default async function AdminPage() {
                     </span>
                   </div>
 
-                  {invitedCats.map(cat => (
-                    <CategorySection
-                      key={cat}
-                      cat={cat}
-                      members={invitedMembers}
-                      getStatus={getStatus}
-                      hasRSVP={hasRSVP}
-                    />
-                  ))}
+                  {invitedCats.map(cat => {
+                    const catMembers = invitedMembers.filter(m => m.category === cat)
+                    if (catMembers.length === 0) return null
+                    const catAnswered = catMembers.filter(m => statuses.get(m.id)?.attending !== null).length
+
+                    return (
+                      <div key={cat} className="border-t border-gray-100 pt-4 mt-4">
+                        <p className="text-xs font-bold text-yahalom-gray uppercase tracking-widest mb-3">
+                          {CATEGORY_LABEL[cat] || cat}
+                          <span className="font-normal mr-2 text-gray-400">({catAnswered}/{catMembers.length} ענו)</span>
+                        </p>
+                        <div className="space-y-2">
+                          {catMembers.map(m => {
+                            const st = statuses.get(m.id)!
+                            return (
+                              <div key={m.id} className="flex items-center justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0">
+                                <span className="font-medium text-sm text-yahalom-dark min-w-[120px]">
+                                  {m.firstName} {m.lastName}
+                                </span>
+                                <span className="flex-1">
+                                  <StatusBadge status={st} />
+                                </span>
+                                <AdminOverrideButton
+                                  eventId={event.id}
+                                  memberEmail={m.email}
+                                  memberName={`${m.firstName} ${m.lastName}`}
+                                  currentAttending={st.attending}
+                                  isAdminOverride={st.source === 'admin'}
+                                />
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )

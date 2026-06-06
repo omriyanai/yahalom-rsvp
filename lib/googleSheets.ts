@@ -105,6 +105,56 @@ export async function getEvents(): Promise<Event[]> {
     }))
 }
 
+// ─── Admin Overrides ──────────────────────────────────────
+
+export interface AdminOverride {
+  timestamp: string
+  eventId: string
+  memberEmail: string
+  memberName: string
+  attending: string   // 'מגיע' | 'לא מגיע'
+  adminName: string
+}
+
+export async function getAdminOverrides(): Promise<AdminOverride[]> {
+  const auth = await getAuth()
+  const sheets = google.sheets({ version: 'v4', auth })
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'AdminOverrides!A2:F2000',
+  })
+  return (response.data.values || [])
+    .filter(row => row[1])
+    .map(row => ({
+      timestamp:   row[0] || '',
+      eventId:     (row[1] || '').trim(),
+      memberEmail: (row[2] || '').trim(),
+      memberName:  (row[3] || '').trim(),
+      attending:   (row[4] || '').trim(),
+      adminName:   (row[5] || '').trim(),
+    }))
+}
+
+export async function addAdminOverride(data: {
+  eventId: string
+  memberEmail: string
+  memberName: string
+  attending: string
+  adminName: string
+}) {
+  const auth = await getAuth()
+  const sheets = google.sheets({ version: 'v4', auth })
+  const timestamp = new Date().toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' })
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'AdminOverrides!A:F',
+    valueInputOption: 'USER_ENTERED',
+    requestBody: {
+      values: [[ timestamp, data.eventId, data.memberEmail, data.memberName, data.attending, data.adminName ]],
+    },
+  })
+}
+
 // ─── RSVPs ────────────────────────────────────────────────
 
 export interface RSVPRecord {

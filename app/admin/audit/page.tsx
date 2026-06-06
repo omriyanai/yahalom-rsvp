@@ -3,26 +3,25 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import SignIn from '@/components/SignIn'
-import { getEvents, getMembers, getAllRSVPs, type Member, type Event, type RSVPRecord } from '@/lib/googleSheets'
+import { getEvents, getMembers, getAllRSVPs, getAdminOverrides, type Member, type Event, type RSVPRecord, type AdminOverride } from '@/lib/googleSheets'
 
 export const dynamic = 'force-dynamic'
 
 const norm = (s: string) => s.trim().replace(/\s+/g, ' ')
 
-type MatchType = 'email' | 'name' | 'none'
+type MatchType = 'email' | 'name' | 'admin' | 'none'
 
 interface AuditRow {
   member: Member
   rsvp: RSVPRecord | null
   matchType: MatchType
   status: string
+  adminName?: string
 }
 
-function buildAudit(members: Member[], rsvps: RSVPRecord[], eventId: string): AuditRow[] {
-  // Collect all RSVPs for this event
+function buildAudit(members: Member[], rsvps: RSVPRecord[], overrides: AdminOverride[], eventId: string): AuditRow[] {
   const eventRSVPs = rsvps.filter(r => r.eventId === eventId)
 
-  // Build lookup maps (last RSVP wins)
   const byEmail = new Map<string, RSVPRecord>()
   const byName  = new Map<string, RSVPRecord>()
   for (const r of eventRSVPs) {
@@ -34,16 +33,25 @@ function buildAudit(members: Member[], rsvps: RSVPRecord[], eventId: string): Au
     const emailKey = norm(m.email).toLowerCase()
     const nameKey  = norm(`${m.firstName} ${m.lastName}`)
 
-    const byEmailMatch = byEmail.get(emailKey)
-    const byNameMatch  = byName.get(nameKey)
-
-    if (byEmailMatch) {
-      return { member: m, rsvp: byEmailMatch, matchType: 'email', status: byEmailMatch.attending }
-    } else if (byNameMatch) {
-      return { member: m, rsvp: byNameMatch, matchType: 'name', status: byNameMatch.attending }
-    } else {
-      return { member: m, rsvp: null, matchType: 'none', status: '' }
+    // Admin override wins
+    const override = [...overrides].reverse().find(o =>
+      o.eventId === eventId && (
+        norm(o.memberEmail).toLowerCase() === emailKey ||
+        norm(o.memberName) === nameKey
+      )
+    )
+    if (override) return {
+      member: m, rsvp: null, matchType: 'admin',
+      status: override.attending, adminName: override.adminName,
     }
+
+    const byEmailMatch = byEmail.get(emailKey)
+    if (byEmailMatch) return { member: m, rsvp: byEmailMatch, matchType: 'email', status: byEmailMatch.attending }
+
+    const byNameMatch = byName.get(nameKey)
+    if (byNameMatch) return { member: m, rsvp: byNameMatch, matchType: 'name', status: byNameMatch.attending }
+
+    return { member: m, rsvp: null, matchType: 'none', status: '' }
   })
 }
 
@@ -66,8 +74,8 @@ export default async function AuditPage() {
   if (!member.category) { cookieStore.delete('yahalom_member'); return <SignIn /> }
   if (member.category !== 'צוות') redirect('/')
 
-  const [events, members, rsvps] = await Promise.all([
-    getEvents(), getMembers(), getAllRSVPs(),
+  const [events, members, rsvps, overrides] = await Promise.all([
+    getEvents(), getMembers(), getAllRSVPs(), getAdminOverrides(),
   ])
 
   // Also find RSVPs that don't match ANY member (orphaned)
@@ -97,11 +105,12 @@ export default async function AuditPage() {
         <div className="flex gap-4 mb-6 flex-wrap">
           <span className="flex items-center gap-1.5 text-xs"><span className="w-3 h-3 rounded-full bg-green-400 inline-block"/> התאמה לפי אימייל</span>
           <span className="flex items-center gap-1.5 text-xs"><span className="w-3 h-3 rounded-full bg-yellow-400 inline-block"/> התאמה לפי שם בלבד ⚠️</span>
+          <span className="flex items-center gap-1.5 text-xs"><span className="w-3 h-3 rounded-full bg-blue-400 inline-block"/> אושר ע"י מנהל 👤</span>
           <span className="flex items-center gap-1.5 text-xs"><span className="w-3 h-3 rounded-full bg-red-400 inline-block"/> לא אותר אישור</span>
         </div>
 
         {events.map(event => {
-          const rows = buildAudit(members, rsvps, event.id)
+          const rows = buildAudit(members, rsvps, overrides, event.id)
           const warnings = rows.filter(r => r.matchType === 'name').length
           const missing  = rows.filter(r => r.matchType === 'none').length
 
@@ -158,6 +167,7 @@ export default async function AuditPage() {
                             <td className="py-2">
                               {row.matchType === 'email' && <span className="text-xs text-green-600 font-medium">✓ אימייל</span>}
                               {row.matchType === 'name'  && <span className="text-xs text-yellow-600 font-medium">⚠ שם</span>}
+                              {row.matchType === 'admin' && <span className="text-xs text-blue-600 font-medium">👤 {row.adminName}</span>}
                               {row.matchType === 'none'  && <span className="text-xs text-red-400">—</span>}
                             </td>
                             <td className="py-2">
