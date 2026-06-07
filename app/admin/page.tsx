@@ -35,7 +35,6 @@ function computeStatus(
   overrides: AdminOverride[],
   eventId: string
 ): MemberStatus {
-  // Admin override wins — take latest (last entry)
   const override = [...overrides].reverse().find(o =>
     o.eventId === eventId && (
       norm(o.memberEmail).toLowerCase() === norm(member.email).toLowerCase() ||
@@ -48,7 +47,6 @@ function computeStatus(
     adminName: override.adminName,
   }
 
-  // Member RSVP — email match first
   const eventRSVPs = rsvps.filter(r => r.eventId === eventId)
   const byEmail = eventRSVPs.find(r => norm(r.email).toLowerCase() === norm(member.email).toLowerCase())
   if (byEmail) return {
@@ -56,7 +54,6 @@ function computeStatus(
     source: 'email',
   }
 
-  // Name match fallback
   const byName = eventRSVPs.find(r => norm(r.name) === norm(`${member.firstName} ${member.lastName}`))
   if (byName) return {
     attending: byName.attending.includes('מגיע') && !byName.attending.includes('לא'),
@@ -68,23 +65,23 @@ function computeStatus(
 
 function StatusBadge({ status }: { status: MemberStatus }) {
   if (status.attending === null) {
-    return <span className="text-xs text-gray-400">טרם ענה ⏳</span>
+    return <span className="text-xs" style={{ color: '#4B5563' }}>טרם ענה ⏳</span>
   }
   if (status.attending) {
     return (
-      <span className="text-xs text-green-700 font-medium">
+      <span className="text-xs font-medium" style={{ color: '#4ADE80' }}>
         ✓ מגיע
         {status.source === 'admin' && (
-          <span className="mr-1 text-green-500 font-normal">(ע"י {status.adminName} 👤)</span>
+          <span className="mr-1 font-normal" style={{ color: '#86EFAC' }}>(ע&quot;י {status.adminName} 👤)</span>
         )}
       </span>
     )
   }
   return (
-    <span className="text-xs text-red-500 font-medium">
+    <span className="text-xs font-medium" style={{ color: '#F87171' }}>
       ✗ לא מגיע
       {status.source === 'admin' && (
-        <span className="mr-1 text-red-400 font-normal">(ע"י {status.adminName} 👤)</span>
+        <span className="mr-1 font-normal" style={{ color: '#FCA5A5' }}>(ע&quot;י {status.adminName} 👤)</span>
       )}
     </span>
   )
@@ -107,15 +104,31 @@ export default async function AdminPage() {
   ])
 
   return (
-    <main className="min-h-screen bg-gray-100">
+    <main className="min-h-screen">
       <Header member={admin} />
       <div className="max-w-3xl mx-auto px-4 py-10">
 
+        {/* Page header */}
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-yahalom-dark">סטטוס אישורי הגעה</h2>
+          <div className="flex items-center gap-3">
+            <div className="w-1 h-6 rounded-full" style={{ background: '#C41230' }} />
+            <h2 className="text-2xl font-bold" style={{ color: '#F9FAFB' }}>סטטוס אישורי הגעה</h2>
+          </div>
           <div className="flex gap-4">
-            <Link href="/admin/audit" className="text-sm text-yellow-600 hover:underline font-medium">🔍 בדיקת נתונים</Link>
-            <Link href="/" className="text-sm text-yahalom-red hover:underline font-medium">← חזרה לאירועים</Link>
+            <Link
+              href="/admin/audit"
+              className="text-sm font-medium transition hover:opacity-80"
+              style={{ color: '#D4A017' }}
+            >
+              🔍 בדיקת נתונים
+            </Link>
+            <Link
+              href="/"
+              className="text-sm font-medium transition hover:opacity-80"
+              style={{ color: '#C41230' }}
+            >
+              → חזרה לאירועים
+            </Link>
           </div>
         </div>
 
@@ -133,15 +146,44 @@ export default async function AdminPage() {
             const totalAnswered = invitedMembers.filter(m => statuses.get(m.id)?.attending !== null).length
 
             return (
-              <div key={event.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
-                <div className="h-1.5 bg-yahalom-red" />
+              <div
+                key={event.id}
+                className="relative rounded-2xl overflow-hidden"
+                style={{
+                  background:           'rgba(9,11,20,0.84)',
+                  backdropFilter:       'blur(28px)',
+                  WebkitBackdropFilter: 'blur(28px)',
+                  border:               '1px solid rgba(255,255,255,0.07)',
+                  boxShadow:            '0 0 50px rgba(196,18,48,0.07), 0 20px 40px rgba(0,0,0,0.5)',
+                }}
+              >
+                {/* Top accent line */}
+                <div className="h-[2px]" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(196,18,48,0.8) 30%, #C41230 50%, rgba(196,18,48,0.8) 70%, transparent 100%)' }} />
+
+                {/* Corner brackets */}
+                <svg className="absolute top-0 left-0 w-8 h-8 pointer-events-none" viewBox="0 0 44 44" fill="none">
+                  <path d="M3 22 L3 3 L22 3" stroke="rgba(196,18,48,0.35)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <svg className="absolute top-0 right-0 w-8 h-8 pointer-events-none" viewBox="0 0 44 44" fill="none">
+                  <path d="M41 22 L41 3 L22 3" stroke="rgba(196,18,48,0.35)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <svg className="absolute bottom-0 left-0 w-8 h-8 pointer-events-none" viewBox="0 0 44 44" fill="none">
+                  <path d="M3 22 L3 41 L22 41" stroke="rgba(196,18,48,0.35)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <svg className="absolute bottom-0 right-0 w-8 h-8 pointer-events-none" viewBox="0 0 44 44" fill="none">
+                  <path d="M41 22 L41 41 L22 41" stroke="rgba(196,18,48,0.35)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-bold text-yahalom-dark mb-1">{event.name}</h3>
-                      <p className="text-sm text-gray-400">{formatHebrewDate(event.date)} | {event.time}</p>
+                      <h3 className="text-lg font-bold mb-1" style={{ color: '#F9FAFB' }}>{event.name}</h3>
+                      <p className="text-sm" style={{ color: '#4B5563' }}>{formatHebrewDate(event.date)} | {event.time}</p>
                     </div>
-                    <span className="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full font-medium whitespace-nowrap">
+                    <span
+                      className="text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap"
+                      style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#6B7280' }}
+                    >
                       {totalAnswered}/{invitedMembers.length} ענו
                     </span>
                   </div>
@@ -152,17 +194,21 @@ export default async function AdminPage() {
                     const catAnswered = catMembers.filter(m => statuses.get(m.id)?.attending !== null).length
 
                     return (
-                      <div key={cat} className="border-t border-gray-100 pt-4 mt-4">
-                        <p className="text-xs font-bold text-yahalom-gray uppercase tracking-widest mb-3">
+                      <div key={cat} className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+                        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#6B7280' }}>
                           {CATEGORY_LABEL[cat] || cat}
-                          <span className="font-normal mr-2 text-gray-400">({catAnswered}/{catMembers.length} ענו)</span>
+                          <span className="font-normal mr-2" style={{ color: '#374151' }}>({catAnswered}/{catMembers.length} ענו)</span>
                         </p>
                         <div className="space-y-2">
                           {catMembers.map(m => {
                             const st = statuses.get(m.id)!
                             return (
-                              <div key={m.id} className="flex items-center justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0">
-                                <span className="font-medium text-sm text-yahalom-dark min-w-[120px]">
+                              <div
+                                key={m.id}
+                                className="flex items-center justify-between gap-3 py-1.5 last:border-0"
+                                style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+                              >
+                                <span className="font-medium text-sm min-w-[120px]" style={{ color: '#E5E7EB' }}>
                                   {m.firstName} {m.lastName}
                                 </span>
                                 <span className="flex-1">

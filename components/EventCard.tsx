@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import RSVPForm from './RSVPForm'
 import type { Event, Member } from '@/lib/googleSheets'
 
 function getEndTime(event: Event): { compact: string; iso: string } {
@@ -93,45 +92,84 @@ export default function EventCard({ event, member }: { event: Event; member: Mem
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
-      <div className="h-1.5 bg-yahalom-red" />
+    <div
+      className="relative rounded-2xl overflow-hidden"
+      style={{
+        background:           'rgba(9,11,20,0.84)',
+        backdropFilter:       'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
+        border:               '1px solid rgba(255,255,255,0.07)',
+        boxShadow: [
+          '0 0 60px rgba(196,18,48,0.08)',
+          '0 24px 48px rgba(0,0,0,0.6)',
+          'inset 0 1px 0 rgba(255,255,255,0.06)',
+          'inset 0 -1px 0 rgba(0,0,0,0.3)',
+        ].join(', '),
+      }}
+    >
+      {/* Top gradient accent line */}
+      <div
+        className="h-[2px]"
+        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(196,18,48,0.8) 30%, #C41230 50%, rgba(196,18,48,0.8) 70%, transparent 100%)' }}
+      />
+
+      {/* ── Tactical corner brackets ── */}
+      <svg className="absolute top-0 left-0 w-9 h-9 pointer-events-none" viewBox="0 0 44 44" fill="none">
+        <path d="M3 22 L3 3 L22 3" stroke="rgba(196,18,48,0.45)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      <svg className="absolute top-0 right-0 w-9 h-9 pointer-events-none" viewBox="0 0 44 44" fill="none">
+        <path d="M41 22 L41 3 L22 3" stroke="rgba(196,18,48,0.45)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      <svg className="absolute bottom-0 left-0 w-9 h-9 pointer-events-none" viewBox="0 0 44 44" fill="none">
+        <path d="M3 22 L3 41 L22 41" stroke="rgba(196,18,48,0.45)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      <svg className="absolute bottom-0 right-0 w-9 h-9 pointer-events-none" viewBox="0 0 44 44" fill="none">
+        <path d="M41 22 L41 41 L22 41" stroke="rgba(196,18,48,0.45)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
 
       <div className="p-6">
-        <h3 className="text-xl font-bold text-yahalom-dark mb-4 leading-snug">
+        {/* Event title */}
+        <h3 className="text-xl font-bold mb-4 leading-snug" style={{ color: '#F9FAFB' }}>
           {event.name}
         </h3>
 
-        <div className="space-y-2.5 mb-6 text-gray-600 text-[15px]">
+        {/* Event details */}
+        <div className="space-y-2.5 mb-6 text-[15px]" style={{ color: '#9CA3AF' }}>
           <div className="flex items-center gap-3">
-            <span className="text-yahalom-red text-lg">📅</span>
+            <span className="text-lg flex-shrink-0">📅</span>
             <span className="font-medium">{formatHebrewDate(event.date)}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-yahalom-red text-lg">🕐</span>
+            <span className="text-lg flex-shrink-0">🕐</span>
             <span>{event.time}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-yahalom-red text-lg">📍</span>
+            <span className="text-lg flex-shrink-0">📍</span>
             <span>{event.location}</span>
           </div>
           {event.description && (
             <div className="flex items-start gap-3 mt-1">
-              <span className="text-yahalom-red text-lg mt-0.5">💬</span>
-              <span className="text-sm text-gray-500 leading-relaxed">{event.description}</span>
+              <span className="text-lg mt-0.5 flex-shrink-0">💬</span>
+              <span className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{event.description}</span>
             </div>
           )}
         </div>
 
+        {/* Navigation & calendar buttons */}
         <div className="flex flex-wrap gap-2.5 mb-5">
           <a
             href={wazeUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-[#00D4FF] text-white px-4 py-2 rounded-xl text-sm font-bold hover:opacity-90 transition shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition hover:opacity-80"
+            style={{
+              background: 'rgba(0,212,255,0.1)',
+              border:     '1px solid rgba(0,212,255,0.3)',
+              color:      '#00D4FF',
+            }}
           >
-            <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="24" cy="22" rx="18" ry="17" fill="white" fillOpacity="0.3"/>
-              <path d="M24 5C14.06 5 6 12.61 6 22c0 6.09 3.31 11.43 8.28 14.48L13 43l6.5-2.5C21 41 22.49 41.2 24 41.2c9.94 0 18-7.61 18-17.2S33.94 5 24 5z" fill="white" fillOpacity="0.9"/>
+            <svg width="16" height="16" viewBox="0 0 48 48" fill="none">
+              <path d="M24 5C14.06 5 6 12.61 6 22c0 6.09 3.31 11.43 8.28 14.48L13 43l6.5-2.5C21 41 22.49 41.2 24 41.2c9.94 0 18-7.61 18-17.2S33.94 5 24 5z" fill="currentColor" fillOpacity="0.8"/>
             </svg>
             ניווט ב-Waze
           </a>
@@ -139,7 +177,12 @@ export default function EventCard({ event, member }: { event: Event; member: Mem
             href={googleCalendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-xl text-sm font-bold hover:opacity-90 transition shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition hover:opacity-80"
+            style={{
+              background: 'rgba(66,133,244,0.1)',
+              border:     '1px solid rgba(66,133,244,0.3)',
+              color:      '#6BA3F5',
+            }}
           >
             📆 Google Calendar
           </a>
@@ -147,46 +190,81 @@ export default function EventCard({ event, member }: { event: Event; member: Mem
             href={outlookCalendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-[#0078D4] text-white px-4 py-2 rounded-xl text-sm font-bold hover:opacity-90 transition shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition hover:opacity-80"
+            style={{
+              background: 'rgba(0,120,212,0.1)',
+              border:     '1px solid rgba(0,120,212,0.3)',
+              color:      '#5BA3E0',
+            }}
           >
             📅 Outlook
           </a>
         </div>
 
+        {/* RSVP section */}
         {submitted ? (
-          <div className={`border-2 rounded-xl p-5 text-center ${attending === 'yes' ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-            <p className={`font-bold text-xl ${attending === 'yes' ? 'text-green-700' : 'text-gray-500'}`}>
+          <div
+            className="rounded-xl p-5 text-center"
+            style={{
+              background: attending === 'yes' ? 'rgba(34,197,94,0.08)' : 'rgba(255,255,255,0.04)',
+              border:     `1px solid ${attending === 'yes' ? 'rgba(34,197,94,0.25)' : 'rgba(255,255,255,0.08)'}`,
+            }}
+          >
+            <p className="font-bold text-xl" style={{ color: attending === 'yes' ? '#4ADE80' : '#6B7280' }}>
               {attending === 'yes' ? '✓ תודה! נתראה בקרוב 🎉' : 'הרשמנו שלא תגיע. תודה על העדכון'}
             </p>
           </div>
         ) : !showForm ? (
           <button
             onClick={() => setShowForm(true)}
-            className="w-full bg-yahalom-red text-white py-3.5 rounded-xl font-bold text-lg hover:bg-red-800 transition shadow-sm"
+            className="relative w-full overflow-hidden rounded-xl py-3.5 font-bold text-white text-lg transition-all duration-300 group"
+            style={{
+              background: 'linear-gradient(135deg, #C41230 0%, #8B0D22 100%)',
+              boxShadow:  '0 0 32px rgba(196,18,48,0.3), 0 4px 16px rgba(196,18,48,0.2)',
+            }}
           >
-            אישור הגעה לאירוע
+            {/* Shimmer on hover */}
+            <span
+              className="absolute inset-0 opacity-0 group-hover:opacity-100"
+              style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.13) 50%, transparent 100%)',
+                animation:  'shimmer-slide 1.8s ease infinite',
+              }}
+            />
+            <span className="relative">אישור הגעה לאירוע</span>
           </button>
         ) : (
-          <div className="border-t border-gray-100 pt-4">
-            <p className="text-sm text-gray-500 text-center mb-3">האם תגיע?</p>
+          <div className="pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+            <p className="text-sm text-center mb-3" style={{ color: '#6B7280' }}>האם תגיע?</p>
             <div className="flex gap-3">
               <button
                 onClick={() => handleQuickRSVP('yes')}
                 disabled={loading}
-                className="flex-1 bg-green-500 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-600 transition disabled:opacity-50 shadow-sm"
+                className="flex-1 py-4 rounded-xl font-bold text-lg transition disabled:opacity-50"
+                style={{
+                  background: 'rgba(34,197,94,0.12)',
+                  border:     '1px solid rgba(34,197,94,0.35)',
+                  color:      '#4ADE80',
+                }}
               >
                 {loading && attending === 'yes' ? '...' : 'כן, מגיע ✓'}
               </button>
               <button
                 onClick={() => handleQuickRSVP('no')}
                 disabled={loading}
-                className="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-bold text-lg hover:bg-gray-300 transition disabled:opacity-50 shadow-sm"
+                className="flex-1 py-4 rounded-xl font-bold text-lg transition disabled:opacity-50"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border:     '1px solid rgba(255,255,255,0.1)',
+                  color:      '#9CA3AF',
+                }}
               >
                 {loading && attending === 'no' ? '...' : 'לא מגיע ✗'}
               </button>
             </div>
           </div>
         )}
+
       </div>
     </div>
   )

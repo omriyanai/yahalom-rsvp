@@ -36,26 +36,28 @@ export default function AdminOverrideButton({
       <button
         onClick={() => set('מגיע')}
         disabled={!!loading}
-        className={`text-xs px-2.5 py-1 rounded-lg font-medium transition disabled:opacity-50 ${
+        className="text-xs px-2.5 py-1 rounded-lg font-medium transition disabled:opacity-50"
+        style={
           currentAttending === true
             ? isAdminOverride
-              ? 'bg-green-500 text-white shadow-sm'
-              : 'bg-green-100 text-green-700'
-            : 'bg-gray-100 text-gray-400 hover:bg-green-100 hover:text-green-700'
-        }`}
+              ? { background: 'rgba(34,197,94,0.25)', border: '1px solid rgba(34,197,94,0.5)', color: '#4ADE80' }
+              : { background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)', color: '#86EFAC' }
+            : { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#4B5563' }
+        }
       >
         {loading === 'מגיע' ? '...' : 'מגיע ✓'}
       </button>
       <button
         onClick={() => set('לא מגיע')}
         disabled={!!loading}
-        className={`text-xs px-2.5 py-1 rounded-lg font-medium transition disabled:opacity-50 ${
+        className="text-xs px-2.5 py-1 rounded-lg font-medium transition disabled:opacity-50"
+        style={
           currentAttending === false
             ? isAdminOverride
-              ? 'bg-red-400 text-white shadow-sm'
-              : 'bg-red-100 text-red-600'
-            : 'bg-gray-100 text-gray-400 hover:bg-red-100 hover:text-red-600'
-        }`}
+              ? { background: 'rgba(196,18,48,0.25)', border: '1px solid rgba(196,18,48,0.5)', color: '#F87171' }
+              : { background: 'rgba(196,18,48,0.12)', border: '1px solid rgba(196,18,48,0.3)', color: '#FCA5A5' }
+            : { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#4B5563' }
+        }
       >
         {loading === 'לא מגיע' ? '...' : 'לא מגיע ✗'}
       </button>

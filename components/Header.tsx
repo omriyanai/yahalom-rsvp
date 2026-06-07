@@ -3,30 +3,74 @@ import type { Member } from '@/lib/googleSheets'
 
 export default function Header({ member }: { member?: Member }) {
   return (
-    <header className="bg-white shadow-sm border-b-4 border-yahalom-red">
-      <div className="max-w-2xl mx-auto px-4 py-6 flex flex-col items-center gap-2">
-        <Image
-          src="/Logo.jpg"
-          alt="עמותת יהלום"
-          width={220}
-          height={96}
-          style={{ height: 'auto', maxHeight: '90px', width: 'auto' }}
-          priority
-        />
-        <p className="text-yahalom-gray text-sm font-medium tracking-wide">
-          תוכנית מנטורינג | אישור הגעה לאירועים
-        </p>
+    <header
+      style={{
+        background:           'rgba(9, 11, 20, 0.88)',
+        backdropFilter:       'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderBottom:         '1px solid rgba(196,18,48,0.35)',
+        boxShadow:            '0 4px 32px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(196,18,48,0.15)',
+      }}
+    >
+      <div className="max-w-2xl mx-auto px-4 py-5 flex flex-col items-center gap-2">
+
+        {/* Logo — transparent PNG floats on dark */}
+        <div className="relative">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle, rgba(196,18,48,0.18), transparent 70%)',
+              filter:     'blur(20px)',
+              transform:  'scale(2.2)',
+            }}
+          />
+          <Image
+            src="/Logo.png"
+            alt="עמותת יהלום"
+            width={200}
+            height={88}
+            style={{
+              height:   'auto',
+              maxHeight:'80px',
+              width:    'auto',
+              position: 'relative',
+              filter:   'drop-shadow(0 2px 14px rgba(196,18,48,0.5)) drop-shadow(0 1px 4px rgba(0,0,0,0.9))',
+            }}
+            priority
+          />
+        </div>
+
+        {/* Subtitle */}
+        <div className="flex items-center gap-3">
+          <div className="h-px w-10" style={{ background: 'linear-gradient(to right, transparent, rgba(196,18,48,0.6))' }} />
+          <p className="text-[11px] font-bold tracking-[0.22em] uppercase select-none" style={{ color: 'rgba(196,18,48,0.75)' }}>
+            תוכנית מנטורינג | אישור הגעה לאירועים
+          </p>
+          <div className="h-px w-10" style={{ background: 'linear-gradient(to left, transparent, rgba(196,18,48,0.6))' }} />
+        </div>
+
+        {/* Member info */}
         {member && (
           <div className="flex items-center gap-3 mt-1">
-            <span className="text-yahalom-dark font-semibold text-sm">
+            <span className="text-sm font-semibold" style={{ color: '#E5E7EB' }}>
               שלום, {member.firstName} {member.lastName} 👋
             </span>
             {member.category === 'צוות' && (
-              <a href="/admin" className="text-xs text-yahalom-red hover:underline transition font-medium">
+              <a
+                href="/admin"
+                className="transition hover:underline"
+                style={{ color: '#C41230', fontSize: '0.75rem', fontWeight: 600 }}
+              >
                 רשימות נוכחות
               </a>
             )}
-            <a href="/api/signout" className="text-xs text-gray-400 hover:text-yahalom-red underline transition">
+            <a
+              href="/api/signout"
+              className="underline transition"
+              style={{ color: '#4B5563', fontSize: '0.75rem' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#C41230')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#4B5563')}
+            >
               התנתקות
             </a>
           </div>
