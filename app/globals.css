@@ -39,3 +39,7 @@ body {
   0%   { transform: translateX(-120%) skewX(-20deg); }
   100% { transform: translateX(220%)  skewX(-20deg); }
 }
+
+/* Header signout link hover */
+.signout-link { color: #4B5563; }
+.signout-link:hover { color: #C41230; }

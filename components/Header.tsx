@@ -66,10 +66,8 @@ export default function Header({ member }: { member?: Member }) {
             )}
             <a
               href="/api/signout"
-              className="underline transition"
-              style={{ color: '#4B5563', fontSize: '0.75rem' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#C41230')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#4B5563')}
+              className="signout-link underline transition"
+              style={{ fontSize: '0.75rem' }}
             >
               התנתקות
             </a>
