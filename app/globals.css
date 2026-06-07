@@ -10,5 +10,32 @@
 
 body {
   direction: rtl;
-  background-color: #f3f4f6;
+  background-color: #07080F;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) rotate(45deg) scale(1);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-110vh) rotate(45deg) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 0.45; }
+}
+
+@keyframes shimmer-slide {
+  0%   { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(220%)  skewX(-20deg); }
 }
