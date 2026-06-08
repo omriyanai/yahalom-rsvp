@@ -60,10 +60,7 @@ body {
   animation: diamond-breathe 9s ease-in-out infinite;
 }
 
-/* Reduce opacity on narrow screens so diamonds don't clutter mobile */
+/* Slightly reduce on tablet — still clearly visible */
 @media (max-width: 900px) {
-  .diamond-bg-layer { opacity: 0.55; }
-}
-@media (max-width: 600px) {
-  .diamond-bg-layer { opacity: 0.3; }
+  .diamond-bg-layer { opacity: 0.85; }
 }
