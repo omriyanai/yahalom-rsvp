@@ -43,3 +43,27 @@ body {
 /* Header signout link hover */
 .signout-link { color: #4B5563; }
 .signout-link:hover { color: #C41230; }
+
+/* ── Diamond photo background ── */
+@keyframes diamond-breathe {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    filter: drop-shadow(0 0 10px rgba(196,18,48,0.22));
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.028);
+    filter: drop-shadow(0 0 22px rgba(196,18,48,0.44));
+  }
+}
+
+.diamond-frame {
+  animation: diamond-breathe 9s ease-in-out infinite;
+}
+
+/* Reduce opacity on narrow screens so diamonds don't clutter mobile */
+@media (max-width: 900px) {
+  .diamond-bg-layer { opacity: 0.55; }
+}
+@media (max-width: 600px) {
+  .diamond-bg-layer { opacity: 0.3; }
+}
