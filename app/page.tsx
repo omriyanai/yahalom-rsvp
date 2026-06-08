@@ -46,7 +46,7 @@ export default async function Home() {
         {/* Page title */}
         <div className="flex items-center justify-center gap-4 mb-8">
           <div className="h-px flex-1 max-w-[80px]" style={{ background: 'linear-gradient(to right, transparent, rgba(196,18,48,0.5))' }} />
-          <h2 className="text-2xl font-bold tracking-tight" style={{ color: '#F9FAFB' }}>
+          <h2 className="text-2xl font-bold tracking-tight text-center" style={{ color: '#F9FAFB' }}>
             אירועים קרובים
           </h2>
           <div className="h-px flex-1 max-w-[80px]" style={{ background: 'linear-gradient(to left, transparent, rgba(196,18,48,0.5))' }} />
