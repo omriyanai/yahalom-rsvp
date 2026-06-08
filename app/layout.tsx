@@ -16,6 +16,44 @@ const PARTICLES: { left: string; size: number; dur: number; delay: number; opaci
   { left: '94%', size: 6,  dur: 17, delay: 11, opacity: 0.13 },
 ]
 
+/* ─── Yahalom unit photos — public domain / CC, IDF official Flickr via Wikimedia Commons ─── */
+const BORDER = 9
+const DIAMONDS: {
+  src: string; size: number; top: string; left: string; opacity: number; delay: string
+}[] = [
+  /* Right column */
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Flickr_-_Israel_Defense_Forces_-_Sayeret_%22Yahalom%22.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Sayeret_%22Yahalom%22.jpg',
+    size: 270, top: '8vh',  left: '72vw', opacity: 0.22, delay: '0s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg',
+    size: 185, top: '45vh', left: '80vw', opacity: 0.17, delay: '2.2s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Operation-Northern-Shield-3.jpg/600px-Operation-Northern-Shield-3.jpg',
+    size: 245, top: '76vh', left: '70vw', opacity: 0.20, delay: '4.1s',
+  },
+  /* Left column */
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%281%29.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%281%29.jpg',
+    size: 235, top: '16vh', left: '5vw',  opacity: 0.18, delay: '1.1s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Operation-Northern-Shield-1.jpg/600px-Operation-Northern-Shield-1.jpg',
+    size: 200, top: '54vh', left: '-1vw', opacity: 0.16, delay: '3.0s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Yahalom-Sapir-Unit-01.jpg/600px-Yahalom-Sapir-Unit-01.jpg',
+    size: 185, top: '84vh', left: '7vw',  opacity: 0.18, delay: '5.3s',
+  },
+  /* Lone accent — upper centre */
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/YAHLOM_SOLIDER_2024.jpg/600px-YAHLOM_SOLIDER_2024.jpg',
+    size: 145, top: '3vh',  left: '50vw', opacity: 0.13, delay: '1.8s',
+  },
+]
+
 export const metadata: Metadata = {
   title: 'עמותת יהלום — אישור הגעה',
   description: 'מערכת אישור הגעה לאירועי עמותת יהלום',
@@ -26,29 +64,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="he" dir="rtl">
       <body>
 
-        {/* ══════════════════════════════════════
-            GLOBAL BG LAYER 1 — Tiling diamond grid
-        ══════════════════════════════════════ */}
+        {/* ══ BG LAYER 1 — Tiling diamond grid ══ */}
         <div
           className="fixed inset-0 pointer-events-none"
           style={{ backgroundImage: GRID_PATTERN, backgroundSize: '60px 60px', zIndex: 0 }}
         />
 
-        {/* ══════════════════════════════════════
-            GLOBAL BG LAYER 2 — Central radial red glow (animated)
-        ══════════════════════════════════════ */}
+        {/* ══ BG LAYER 2 — Central radial red glow (animated) ══ */}
         <div
           className="fixed inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 65% 60% at 50% 50%, rgba(196,18,48,0.13) 0%, transparent 70%)',
-            animation: 'pulse-glow 6s ease-in-out infinite',
+            background:  'radial-gradient(ellipse 65% 60% at 50% 50%, rgba(196,18,48,0.13) 0%, transparent 70%)',
+            animation:   'pulse-glow 6s ease-in-out infinite',
             zIndex: 0,
           }}
         />
 
-        {/* ══════════════════════════════════════
-            GLOBAL BG LAYER 3 — Dark vignette edges
-        ══════════════════════════════════════ */}
+        {/* ══ BG LAYER 3 — Dark vignette edges ══ */}
         <div
           className="fixed inset-0 pointer-events-none"
           style={{
@@ -57,9 +89,74 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
 
-        {/* ══════════════════════════════════════
-            GLOBAL BG LAYER 4 — Floating diamond particles
-        ══════════════════════════════════════ */}
+        {/* ══ BG LAYER 4 — Yahalom unit photos in diamond frames ══ */}
+        <div
+          className="fixed inset-0 overflow-hidden pointer-events-none diamond-bg-layer"
+          aria-hidden="true"
+          style={{ zIndex: 0 }}
+        >
+          {DIAMONDS.map((d, i) => (
+            <div
+              key={i}
+              className="absolute diamond-frame"
+              style={{
+                top:            d.top,
+                left:           d.left,
+                width:          d.size + BORDER * 2,
+                height:         d.size + BORDER * 2,
+                transform:      'translate(-50%, -50%)',
+                opacity:        d.opacity,
+                animationDelay: d.delay,
+              }}
+            >
+              {/* Red tactical border ring */}
+              <div style={{
+                position:   'absolute', inset: 0,
+                background: 'linear-gradient(135deg, rgba(196,18,48,0.7), rgba(139,13,34,0.55))',
+                clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+              }} />
+              {/* Inner highlight edge */}
+              <div style={{
+                position:   'absolute', inset: BORDER - 1,
+                background: 'rgba(255,255,255,0.10)',
+                clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+              }} />
+              {/* Photo */}
+              <div style={{
+                position:           'absolute',
+                top: BORDER, left: BORDER, right: BORDER, bottom: BORDER,
+                backgroundImage:    `url("${d.src}")`,
+                backgroundSize:     'cover',
+                backgroundPosition: 'center',
+                filter:             'brightness(0.52) saturate(0.55) contrast(1.05)',
+                clipPath:           'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+              }} />
+              {/* Atmospheric vignette over photo */}
+              <div style={{
+                position:   'absolute',
+                top: BORDER, left: BORDER, right: BORDER, bottom: BORDER,
+                background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,8,15,0.68) 100%)',
+                clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+              }} />
+              {/* Vertex accent dots */}
+              {[
+                { top: -3,    left: '50%',  transform: 'translateX(-50%)' },
+                { bottom: -3, left: '50%',  transform: 'translateX(-50%)' },
+                { top: '50%', left: -3,     transform: 'translateY(-50%)' },
+                { top: '50%', right: -3,    transform: 'translateY(-50%)' },
+              ].map((s, j) => (
+                <div key={j} style={{
+                  position: 'absolute', ...s,
+                  width: 5, height: 5,
+                  background: 'rgba(196,18,48,0.95)',
+                  borderRadius: '50%',
+                }} />
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* ══ BG LAYER 5 — Floating diamond particles ══ */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
           {PARTICLES.map((p, i) => (
             <div
@@ -77,7 +174,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           ))}
         </div>
 
-        {/* ── Page content sits above the background ── */}
+        {/* ── Page content sits above all background layers ── */}
         <div className="relative" style={{ zIndex: 1 }}>
           {children}
         </div>

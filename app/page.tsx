@@ -2,7 +2,6 @@ import { cookies } from 'next/headers'
 import Header from '@/components/Header'
 import EventCard from '@/components/EventCard'
 import SignIn from '@/components/SignIn'
-import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import { getEvents, type Member } from '@/lib/googleSheets'
 
 export const dynamic = 'force-dynamic'
@@ -40,12 +39,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen">
-      {/* Diamond photo background — sits between global bg and content */}
-      <DiamondPhotoBackground />
-
-      {/* Content sits above the diamond layer */}
-      <div className="relative" style={{ zIndex: 2 }}>
-        <Header member={member} />
+      <Header member={member} />
 
         <div className="max-w-2xl mx-auto px-4 py-10">
 
@@ -82,9 +76,8 @@ export default async function Home() {
         </div>
 
         <footer className="text-center text-xs pb-8 mt-4" style={{ color: '#374151' }}>
-          עמותת יהלום © {new Date().getFullYear()}
-        </footer>
-      </div>
+        עמותת יהלום © {new Date().getFullYear()}
+      </footer>
     </main>
   )
 }

@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Header from '@/components/Header'
 import SignIn from '@/components/SignIn'
 import AdminOverrideButton from '@/components/AdminOverrideButton'
-import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import {
   getEvents, getMembers, getAllRSVPs, getAdminOverrides,
   type Member, type RSVPRecord, type AdminOverride,
@@ -106,8 +105,6 @@ export default async function AdminPage() {
 
   return (
     <main className="min-h-screen">
-      <DiamondPhotoBackground />
-      <div className="relative" style={{ zIndex: 2 }}>
       <Header member={admin} />
       <div className="max-w-3xl mx-auto px-4 py-10">
 
@@ -237,7 +234,6 @@ export default async function AdminPage() {
           })}
         </div>
       </div>
-      </div>{/* /z-index wrapper */}
     </main>
   )
 }
