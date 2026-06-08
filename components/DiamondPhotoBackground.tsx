@@ -29,55 +29,55 @@ const DIAMONDS: Diamond[] = [
   /* ── Top row ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/4/49/Yahlom_soliders_2025.jpg',
-    size:    160, top: '6vh',  left: '9vw',  opacity: 0.42, delay: '0s',
+    size:    260, top: '6vh',  left: '9vw',  opacity: 0.42, delay: '0s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/e/e1/YAHLOM_SOLIDER_2024.jpg',
-    size:    150, top: '4vh',  left: '52vw', opacity: 0.38, delay: '1.2s',
+    size:    240, top: '4vh',  left: '52vw', opacity: 0.38, delay: '1.2s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/8/8e/Yahalom-Sapir-Unit-02.jpg',
-    size:    160, top: '7vh',  left: '84vw', opacity: 0.40, delay: '2.4s',
+    size:    260, top: '7vh',  left: '84vw', opacity: 0.40, delay: '2.4s',
   },
 
   /* ── Upper-middle row ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/1/17/Yahlom_soliders_excercise.jpg',
-    size:    165, top: '30vh', left: '22vw', opacity: 0.38, delay: '0.6s',
+    size:    270, top: '32vh', left: '22vw', opacity: 0.38, delay: '0.6s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/6/60/Operation-Northern-Shield-3.jpg',
-    size:    165, top: '28vh', left: '72vw', opacity: 0.40, delay: '1.8s',
+    size:    270, top: '30vh', left: '72vw', opacity: 0.40, delay: '1.8s',
   },
 
   /* ── Center row ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/d/d1/Operation-Northern-Shield-1.jpg',
-    size:    170, top: '52vh', left: '4vw',  opacity: 0.38, delay: '3.0s',
+    size:    280, top: '54vh', left: '4vw',  opacity: 0.38, delay: '3.0s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/2/21/Operation-Northern-Shield-2.jpg',
-    size:    170, top: '50vh', left: '88vw', opacity: 0.38, delay: '4.2s',
+    size:    280, top: '52vh', left: '88vw', opacity: 0.38, delay: '4.2s',
   },
 
   /* ── Lower-middle row ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/a/af/Yahalom-Sapir-Unit-01.jpg',
-    size:    165, top: '71vh', left: '30vw', opacity: 0.38, delay: '1.4s',
+    size:    270, top: '74vh', left: '30vw', opacity: 0.38, delay: '1.4s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/8/8d/Operation-Northern-Shield-5.jpg',
-    size:    165, top: '73vh', left: '63vw', opacity: 0.38, delay: '2.8s',
+    size:    270, top: '76vh', left: '63vw', opacity: 0.38, delay: '2.8s',
   },
 
   /* ── Bottom row ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/d/d7/Yahalom-Sapir-Unit-03.jpg',
-    size:    160, top: '90vh', left: '14vw', opacity: 0.36, delay: '0.4s',
+    size:    260, top: '93vh', left: '14vw', opacity: 0.36, delay: '0.4s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/f/f2/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg',
-    size:    160, top: '91vh', left: '79vw', opacity: 0.36, delay: '3.6s',
+    size:    260, top: '94vh', left: '79vw', opacity: 0.36, delay: '3.6s',
   },
 
 ]
