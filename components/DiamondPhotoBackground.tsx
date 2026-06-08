@@ -5,15 +5,18 @@
  * Photos hug the left/right edges of the viewport so they never overlap
  * the centered page content or the login box.
  *
- * Layout (left column + right column, 3 each, + 1 bottom accent):
+ * Layout (left column + right column, 5 each, staggered — no overlaps):
  *
- *                          [R1 — top-right]
- *   [L1 — upper-left]
- *                          [R2 — mid-right]
- *   [L2 — mid-left]
- *                          [R3 — lower-right]
- *   [L3 — lower-left]
- *             [B — bottom center-left]
+ *                          [R1 — 7vh]
+ *   [L1 — 18vh]
+ *                          [R2 — 29vh]
+ *   [L2 — 40vh]
+ *                          [R3 — 51vh]
+ *   [L3 — 62vh]
+ *                          [R4 — 73vh]
+ *   [L4 — 82vh]
+ *                          [R5 — 93vh]
+ *   [L5 — 96vh]
  */
 
 const BORDER = 10   // px — red border ring thickness
@@ -28,32 +31,48 @@ interface Diamond {
 }
 
 const DIAMONDS: Diamond[] = [
-  /* ── Right column ── */
+  /* ── Right column (5 diamonds, 22vh apart, left: ~81vw) ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/4/49/Yahlom_soliders_2025.jpg',
-    size:    200, top: '8vh',  left: '80vw', opacity: 0.42, delay: '0s',
+    size:    155, top: '7vh',  left: '81vw', opacity: 0.42, delay: '0s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/8/8e/Yahalom-Sapir-Unit-02.jpg',
-    size:    185, top: '42vh', left: '84vw', opacity: 0.38, delay: '2.0s',
+    size:    155, top: '29vh', left: '83vw', opacity: 0.38, delay: '1.6s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/6/60/Operation-Northern-Shield-3.jpg',
-    size:    200, top: '76vh', left: '79vw', opacity: 0.40, delay: '4.0s',
+    size:    155, top: '51vh', left: '80vw', opacity: 0.40, delay: '3.2s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/2/21/Operation-Northern-Shield-2.jpg',
+    size:    155, top: '73vh', left: '82vw', opacity: 0.38, delay: '4.8s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/d/d7/Yahalom-Sapir-Unit-03.jpg',
+    size:    155, top: '93vh', left: '81vw', opacity: 0.36, delay: '6.4s',
   },
 
-  /* ── Left column ── */
+  /* ── Left column (5 diamonds, 22vh apart, left: ~7vw) ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/1/17/Yahlom_soliders_excercise.jpg',
-    size:    195, top: '20vh', left: '8vw',  opacity: 0.38, delay: '1.0s',
+    size:    155, top: '18vh', left: '7vw',  opacity: 0.38, delay: '0.8s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/d/d1/Operation-Northern-Shield-1.jpg',
-    size:    185, top: '54vh', left: '4vw',  opacity: 0.36, delay: '3.0s',
+    size:    155, top: '40vh', left: '5vw',  opacity: 0.36, delay: '2.4s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/a/af/Yahalom-Sapir-Unit-01.jpg',
-    size:    190, top: '86vh', left: '9vw',  opacity: 0.38, delay: '5.0s',
+    size:    155, top: '62vh', left: '8vw',  opacity: 0.38, delay: '4.0s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/8/8d/Operation-Northern-Shield-5.jpg',
+    size:    155, top: '82vh', left: '6vw',  opacity: 0.36, delay: '5.6s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/f/f2/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg',
+    size:    155, top: '96vh', left: '7vw',  opacity: 0.34, delay: '7.2s',
   },
 
   /* ── Small bottom accent (partially off-screen) ── */
