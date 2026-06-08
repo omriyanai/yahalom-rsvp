@@ -23,33 +23,33 @@ const DIAMONDS: {
 }[] = [
   /* Right column */
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Flickr_-_Israel_Defense_Forces_-_Sayeret_%22Yahalom%22.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Sayeret_%22Yahalom%22.jpg',
+    src:  'https://upload.wikimedia.org/wikipedia/commons/4/49/Yahlom_soliders_2025.jpg',
     size: 270, top: '8vh',  left: '72vw', opacity: 0.22, delay: '0s',
   },
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg',
+    src:  'https://upload.wikimedia.org/wikipedia/commons/8/8e/Yahalom-Sapir-Unit-02.jpg',
     size: 185, top: '45vh', left: '80vw', opacity: 0.17, delay: '2.2s',
   },
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Operation-Northern-Shield-3.jpg/600px-Operation-Northern-Shield-3.jpg',
+    src:  'https://upload.wikimedia.org/wikipedia/commons/6/60/Operation-Northern-Shield-3.jpg',
     size: 245, top: '76vh', left: '70vw', opacity: 0.20, delay: '4.1s',
   },
   /* Left column */
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%281%29.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%281%29.jpg',
+    src:  'https://upload.wikimedia.org/wikipedia/commons/1/17/Yahlom_soliders_excercise.jpg',
     size: 235, top: '16vh', left: '5vw',  opacity: 0.18, delay: '1.1s',
   },
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Operation-Northern-Shield-1.jpg/600px-Operation-Northern-Shield-1.jpg',
+    src:  'https://upload.wikimedia.org/wikipedia/commons/d/d1/Operation-Northern-Shield-1.jpg',
     size: 200, top: '54vh', left: '-1vw', opacity: 0.16, delay: '3.0s',
   },
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Yahalom-Sapir-Unit-01.jpg/600px-Yahalom-Sapir-Unit-01.jpg',
+    src:  'https://upload.wikimedia.org/wikipedia/commons/a/af/Yahalom-Sapir-Unit-01.jpg',
     size: 185, top: '84vh', left: '7vw',  opacity: 0.18, delay: '5.3s',
   },
   /* Lone accent — upper centre */
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/YAHLOM_SOLIDER_2024.jpg/600px-YAHLOM_SOLIDER_2024.jpg',
+    src:  'https://upload.wikimedia.org/wikipedia/commons/e/e1/YAHLOM_SOLIDER_2024.jpg',
     size: 145, top: '3vh',  left: '50vw', opacity: 0.13, delay: '1.8s',
   },
 ]
