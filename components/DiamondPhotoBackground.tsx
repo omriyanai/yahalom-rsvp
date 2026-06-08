@@ -5,18 +5,13 @@
  * Photos hug the left/right edges of the viewport so they never overlap
  * the centered page content or the login box.
  *
- * Layout (left column + right column, 5 each, staggered — no overlaps):
+ * Layout (11 diamonds spread across full screen, 5 rows):
  *
- *                          [R1 — 7vh]
- *   [L1 — 18vh]
- *                          [R2 — 29vh]
- *   [L2 — 40vh]
- *                          [R3 — 51vh]
- *   [L3 — 62vh]
- *                          [R4 — 73vh]
- *   [L4 — 82vh]
- *                          [R5 — 93vh]
- *   [L5 — 96vh]
+ *   [TL]        [TC]        [TR]       ← top row
+ *       [UML]        [UMR]             ← upper-middle
+ *   [CL]                  [CR]         ← center (edges)
+ *         [LML]      [LMR]            ← lower-middle
+ *   [BL]                  [BR]         ← bottom row
  */
 
 const BORDER = 10   // px — red border ring thickness
@@ -31,55 +26,60 @@ interface Diamond {
 }
 
 const DIAMONDS: Diamond[] = [
-  /* ── Right column (5 diamonds, 22vh apart, left: ~81vw) ── */
+  /* ── Top row ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/4/49/Yahlom_soliders_2025.jpg',
-    size:    155, top: '7vh',  left: '81vw', opacity: 0.42, delay: '0s',
+    size:    160, top: '6vh',  left: '9vw',  opacity: 0.42, delay: '0s',
+  },
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/e/e1/YAHLOM_SOLIDER_2024.jpg',
+    size:    150, top: '4vh',  left: '52vw', opacity: 0.38, delay: '1.2s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/8/8e/Yahalom-Sapir-Unit-02.jpg',
-    size:    155, top: '29vh', left: '83vw', opacity: 0.38, delay: '1.6s',
+    size:    160, top: '7vh',  left: '84vw', opacity: 0.40, delay: '2.4s',
+  },
+
+  /* ── Upper-middle row ── */
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/1/17/Yahlom_soliders_excercise.jpg',
+    size:    165, top: '30vh', left: '22vw', opacity: 0.38, delay: '0.6s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/6/60/Operation-Northern-Shield-3.jpg',
-    size:    155, top: '51vh', left: '80vw', opacity: 0.40, delay: '3.2s',
+    size:    165, top: '28vh', left: '72vw', opacity: 0.40, delay: '1.8s',
+  },
+
+  /* ── Center row ── */
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/d/d1/Operation-Northern-Shield-1.jpg',
+    size:    170, top: '52vh', left: '4vw',  opacity: 0.38, delay: '3.0s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/2/21/Operation-Northern-Shield-2.jpg',
-    size:    155, top: '73vh', left: '82vw', opacity: 0.38, delay: '4.8s',
-  },
-  {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/d/d7/Yahalom-Sapir-Unit-03.jpg',
-    size:    155, top: '93vh', left: '81vw', opacity: 0.36, delay: '6.4s',
+    size:    170, top: '50vh', left: '88vw', opacity: 0.38, delay: '4.2s',
   },
 
-  /* ── Left column (5 diamonds, 22vh apart, left: ~7vw) ── */
-  {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/1/17/Yahlom_soliders_excercise.jpg',
-    size:    155, top: '18vh', left: '7vw',  opacity: 0.38, delay: '0.8s',
-  },
-  {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/d/d1/Operation-Northern-Shield-1.jpg',
-    size:    155, top: '40vh', left: '5vw',  opacity: 0.36, delay: '2.4s',
-  },
+  /* ── Lower-middle row ── */
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/a/af/Yahalom-Sapir-Unit-01.jpg',
-    size:    155, top: '62vh', left: '8vw',  opacity: 0.38, delay: '4.0s',
+    size:    165, top: '71vh', left: '30vw', opacity: 0.38, delay: '1.4s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/8/8d/Operation-Northern-Shield-5.jpg',
-    size:    155, top: '82vh', left: '6vw',  opacity: 0.36, delay: '5.6s',
+    size:    165, top: '73vh', left: '63vw', opacity: 0.38, delay: '2.8s',
+  },
+
+  /* ── Bottom row ── */
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/d/d7/Yahalom-Sapir-Unit-03.jpg',
+    size:    160, top: '90vh', left: '14vw', opacity: 0.36, delay: '0.4s',
   },
   {
     src:     'https://upload.wikimedia.org/wikipedia/commons/f/f2/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg',
-    size:    155, top: '96vh', left: '7vw',  opacity: 0.34, delay: '7.2s',
+    size:    160, top: '91vh', left: '79vw', opacity: 0.36, delay: '3.6s',
   },
 
-  /* ── Small bottom accent (partially off-screen) ── */
-  {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/e/e1/YAHLOM_SOLIDER_2024.jpg',
-    size:    155, top: '96vh', left: '50vw', opacity: 0.30, delay: '1.5s',
-  },
 ]
 
 export default function DiamondPhotoBackground() {
