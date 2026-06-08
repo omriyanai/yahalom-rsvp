@@ -11,7 +11,12 @@ export default async function Home() {
   const cookieStore = cookies()
   const memberCookie = cookieStore.get('yahalom_member')
 
-  if (!memberCookie) return <SignIn />
+  if (!memberCookie) return (
+    <main className="min-h-screen">
+      <DiamondPhotoBackground />
+      <div className="relative" style={{ zIndex: 2 }}><SignIn /></div>
+    </main>
+  )
 
   let member: Member
   try {
@@ -23,7 +28,12 @@ export default async function Home() {
   // If cookie is old (missing category), force re-login to get fresh data
   if (!member.category) {
     cookieStore.delete('yahalom_member')
-    return <SignIn />
+    return (
+      <main className="min-h-screen">
+        <DiamondPhotoBackground />
+        <div className="relative" style={{ zIndex: 2 }}><SignIn /></div>
+      </main>
+    )
   }
 
   let events: Awaited<ReturnType<typeof getEvents>> = []
