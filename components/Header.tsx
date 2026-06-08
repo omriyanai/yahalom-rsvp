@@ -42,11 +42,16 @@ export default function Header({ member }: { member?: Member }) {
 
         {/* Subtitle */}
         <div className="flex items-center gap-3">
-          <div className="h-px w-10" style={{ background: 'linear-gradient(to right, transparent, rgba(196,18,48,0.6))' }} />
-          <p className="text-[11px] font-bold tracking-[0.22em] uppercase select-none" style={{ color: 'rgba(196,18,48,0.75)' }}>
-            תוכנית מנטורינג | אישור הגעה לאירועים
-          </p>
-          <div className="h-px w-10" style={{ background: 'linear-gradient(to left, transparent, rgba(196,18,48,0.6))' }} />
+          <div className="h-px w-10 flex-shrink-0" style={{ background: 'linear-gradient(to right, transparent, rgba(196,18,48,0.6))' }} />
+          <div className="text-center">
+            <p className="text-[11px] font-bold tracking-[0.22em] uppercase select-none leading-relaxed" style={{ color: 'rgba(196,18,48,0.75)' }}>
+              תוכנית מנטורינג
+            </p>
+            <p className="text-[11px] font-bold tracking-[0.22em] uppercase select-none leading-relaxed" style={{ color: 'rgba(196,18,48,0.75)' }}>
+              אישור הגעה לאירועים
+            </p>
+          </div>
+          <div className="h-px w-10 flex-shrink-0" style={{ background: 'linear-gradient(to left, transparent, rgba(196,18,48,0.6))' }} />
         </div>
 
         {/* Member info */}
