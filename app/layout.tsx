@@ -21,36 +21,36 @@ const BORDER = 9
 const DIAMONDS: {
   src: string; size: number; top: string; left: string; opacity: number; delay: string
 }[] = [
-  /* ── Right column (desktop: in right margin / mobile: peeks from right edge) ── */
+  /* ── Right column ── */
   {
     src:  'https://upload.wikimedia.org/wikipedia/commons/4/49/Yahlom_soliders_2025.jpg',
-    size: 260, top: '10vh', left: '82vw', opacity: 0.28, delay: '0s',
+    size: 360, top: '12vh', left: '82vw', opacity: 0.55, delay: '0s',
   },
   {
     src:  'https://upload.wikimedia.org/wikipedia/commons/8/8e/Yahalom-Sapir-Unit-02.jpg',
-    size: 180, top: '48vh', left: '88vw', opacity: 0.22, delay: '2.2s',
+    size: 260, top: '50vh', left: '90vw', opacity: 0.45, delay: '2.2s',
   },
   {
     src:  'https://upload.wikimedia.org/wikipedia/commons/6/60/Operation-Northern-Shield-3.jpg',
-    size: 235, top: '78vh', left: '80vw', opacity: 0.25, delay: '4.1s',
+    size: 320, top: '80vh', left: '80vw', opacity: 0.50, delay: '4.1s',
   },
-  /* ── Left column (desktop: in left margin / mobile: peeks from left edge) ── */
+  /* ── Left column ── */
   {
     src:  'https://upload.wikimedia.org/wikipedia/commons/1/17/Yahlom_soliders_excercise.jpg',
-    size: 230, top: '18vh', left: '18vw', opacity: 0.22, delay: '1.1s',
+    size: 320, top: '18vh', left: '18vw', opacity: 0.50, delay: '1.1s',
   },
   {
     src:  'https://upload.wikimedia.org/wikipedia/commons/d/d1/Operation-Northern-Shield-1.jpg',
-    size: 195, top: '56vh', left: '12vw', opacity: 0.20, delay: '3.0s',
+    size: 270, top: '56vh', left: '10vw', opacity: 0.45, delay: '3.0s',
   },
   {
     src:  'https://upload.wikimedia.org/wikipedia/commons/a/af/Yahalom-Sapir-Unit-01.jpg',
-    size: 180, top: '86vh', left: '20vw', opacity: 0.22, delay: '5.3s',
+    size: 260, top: '86vh', left: '20vw', opacity: 0.48, delay: '5.3s',
   },
   /* ── Centre accent ── */
   {
     src:  'https://upload.wikimedia.org/wikipedia/commons/e/e1/YAHLOM_SOLIDER_2024.jpg',
-    size: 140, top: '4vh',  left: '50vw', opacity: 0.18, delay: '1.8s',
+    size: 200, top: '4vh',  left: '50vw', opacity: 0.40, delay: '1.8s',
   },
 ]
 
@@ -128,7 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 backgroundImage:    `url("${d.src}")`,
                 backgroundSize:     'cover',
                 backgroundPosition: 'center',
-                filter:             'brightness(0.52) saturate(0.55) contrast(1.05)',
+                filter:             'brightness(0.75) saturate(0.7) contrast(1.1)',
                 clipPath:           'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
               }} />
               {/* Atmospheric vignette over photo */}
