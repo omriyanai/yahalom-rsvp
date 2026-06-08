@@ -1,67 +1,62 @@
 /**
- * DiamondPhotoBackground
- * ──────────────────────
- * Decorative fixed layer shown only on authenticated pages (not login).
- * Uses publicly released IDF/Yahalom unit photos from Wikimedia Commons
- * (originally published on the IDF official Flickr — public domain / CC).
- *
- * Each photo is clipped into a diamond (rotated-square) frame with a thin
- * red tactical border, matching the existing diamond motif in the design.
- * The layer sits between the background grid and the page content.
+ * DiamondPhotoBackground — authenticated pages only (not shown on login).
+ * Photos: IDF/Yahalom official releases via Wikimedia Commons (CC BY-SA 3.0).
+ * Uses position:fixed so diamonds stay in place as page scrolls.
  */
 
-interface Diamond {
-  src:     string
-  size:    number   // outer diamond size in px
-  top:     string   // viewport-relative CSS value
-  left:    string   // viewport-relative CSS value
-  opacity: number   // base opacity (0–1)
-  delay:   string   // animation-delay
-}
+const BORDER = 10
 
-/* ── 7 Yahalom unit photos, Wikimedia Commons (CC / public domain) ── */
-const DIAMONDS: Diamond[] = [
-  /* Right column — three diamonds flanking content on the right */
-  {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Flickr_-_Israel_Defense_Forces_-_Sayeret_%22Yahalom%22.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Sayeret_%22Yahalom%22.jpg',
-    size:    270, top: '8vh',  left: '72vw', opacity: 0.20, delay: '0s',
-  },
-  {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg',
-    size:    185, top: '45vh', left: '80vw', opacity: 0.15, delay: '2.2s',
-  },
-  {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Operation-Northern-Shield-3.jpg/600px-Operation-Northern-Shield-3.jpg',
-    size:    245, top: '76vh', left: '70vw', opacity: 0.18, delay: '4.1s',
-  },
+const DIAMONDS: {
+  src: string; size: number; top: string; left: string; opacity: number; delay: string
+}[] = [
+  /* ── Scattered randomly across the full background ── */
 
-  /* Left column — three diamonds flanking content on the left */
+  // Top-left
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%281%29.jpg/600px-Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%281%29.jpg',
-    size:    235, top: '16vh', left: '5vw',  opacity: 0.16, delay: '1.1s',
+    src:     'https://upload.wikimedia.org/wikipedia/commons/4/49/Yahlom_soliders_2025.jpg',
+    size: 340, top: '5vh',  left: '7vw',  opacity: 0.52, delay: '0s',
   },
+  // Top-right
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Operation-Northern-Shield-1.jpg/600px-Operation-Northern-Shield-1.jpg',
-    size:    200, top: '54vh', left: '-1vw', opacity: 0.14, delay: '3.0s',
+    src:     'https://upload.wikimedia.org/wikipedia/commons/1/17/Yahlom_soliders_excercise.jpg',
+    size: 290, top: '3vh',  left: '72vw', opacity: 0.48, delay: '1.5s',
   },
+  // Right, upper-middle
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Yahalom-Sapir-Unit-01.jpg/600px-Yahalom-Sapir-Unit-01.jpg',
-    size:    185, top: '84vh', left: '7vw',  opacity: 0.16, delay: '5.3s',
+    src:     'https://upload.wikimedia.org/wikipedia/commons/8/8e/Yahalom-Sapir-Unit-02.jpg',
+    size: 310, top: '32vh', left: '83vw', opacity: 0.50, delay: '3.2s',
   },
-
-  /* Lone accent diamond — upper center, very subtle */
+  // Left, upper-middle (bleeds off edge for drama)
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/YAHLOM_SOLIDER_2024.jpg/600px-YAHLOM_SOLIDER_2024.jpg',
-    size:    145, top: '3vh',  left: '50vw', opacity: 0.11, delay: '1.8s',
+    src:     'https://upload.wikimedia.org/wikipedia/commons/d/d1/Operation-Northern-Shield-1.jpg',
+    size: 270, top: '26vh', left: '2vw',  opacity: 0.46, delay: '0.8s',
+  },
+  // Right, center
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/6/60/Operation-Northern-Shield-3.jpg',
+    size: 260, top: '55vh', left: '78vw', opacity: 0.48, delay: '2.4s',
+  },
+  // Left, center
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/a/af/Yahalom-Sapir-Unit-01.jpg',
+    size: 280, top: '50vh', left: '10vw', opacity: 0.50, delay: '4.8s',
+  },
+  // Right, lower
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/e/e1/YAHLOM_SOLIDER_2024.jpg',
+    size: 320, top: '76vh', left: '70vw', opacity: 0.50, delay: '1.2s',
+  },
+  // Left, lower (bleeds off edge)
+  {
+    src:     'https://upload.wikimedia.org/wikipedia/commons/4/49/Yahlom_soliders_2025.jpg',
+    size: 270, top: '80vh', left: '4vw',  opacity: 0.46, delay: '3.6s',
   },
 ]
-
-const BORDER = 9   // px — thickness of the red diamond border ring
 
 export default function DiamondPhotoBackground() {
   return (
     <div
-      className="fixed inset-0 overflow-hidden pointer-events-none diamond-bg-layer"
+      className="fixed inset-0 overflow-hidden pointer-events-none"
       aria-hidden="true"
       style={{ zIndex: 1 }}
     >
@@ -79,91 +74,49 @@ export default function DiamondPhotoBackground() {
             animationDelay: d.delay,
           }}
         >
-          {/* ── Red tactical border ring ── */}
+          {/* Red tactical border ring */}
           <div style={{
-            position: 'absolute',
-            inset:    0,
-            background: 'linear-gradient(135deg, rgba(196,18,48,0.65), rgba(139,13,34,0.5))',
-            clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+            position:   'absolute', inset: 0,
+            background: 'linear-gradient(135deg, rgba(196,18,48,0.80), rgba(139,13,34,0.65))',
+            clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
           }} />
-
-          {/* ── Thin inner highlight line (bright top edge) ── */}
+          {/* Inner highlight */}
           <div style={{
-            position:  'absolute',
-            inset:     BORDER - 1,
-            background: 'rgba(255,255,255,0.12)',
-            clipPath:  'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+            position:   'absolute', inset: BORDER - 1,
+            background: 'rgba(255,255,255,0.10)',
+            clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
           }} />
-
-          {/* ── The photo itself ── */}
+          {/* Photo */}
           <div style={{
             position:           'absolute',
-            top:                BORDER,
-            left:               BORDER,
-            right:              BORDER,
-            bottom:             BORDER,
+            top: BORDER, left: BORDER, right: BORDER, bottom: BORDER,
             backgroundImage:    `url("${d.src}")`,
             backgroundSize:     'cover',
             backgroundPosition: 'center',
-            filter:             'brightness(0.48) saturate(0.55) contrast(1.05)',
+            filter:             'brightness(0.75) saturate(0.7) contrast(1.1)',
             clipPath:           'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
           }} />
-
-          {/* ── Dark atmospheric vignette over the photo ── */}
+          {/* Atmospheric vignette */}
           <div style={{
-            position: 'absolute',
-            top:      BORDER,
-            left:     BORDER,
-            right:    BORDER,
-            bottom:   BORDER,
-            background: [
-              'radial-gradient(ellipse at center, transparent 35%, rgba(7,8,15,0.72) 100%)',
-              'rgba(7,8,15,0.28)',
-            ].join(', '),
-            clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+            position:   'absolute',
+            top: BORDER, left: BORDER, right: BORDER, bottom: BORDER,
+            background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,8,15,0.60) 100%)',
+            clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
           }} />
-
-          {/* ── Tiny corner tick marks at each diamond vertex ── */}
-          {/* Top vertex */}
-          <div style={{
-            position:  'absolute',
-            top:       -3,
-            left:      '50%',
-            transform: 'translateX(-50%)',
-            width:     4, height: 4,
-            background: 'rgba(196,18,48,0.9)',
-            borderRadius: '50%',
-          }} />
-          {/* Bottom vertex */}
-          <div style={{
-            position:  'absolute',
-            bottom:    -3,
-            left:      '50%',
-            transform: 'translateX(-50%)',
-            width:     4, height: 4,
-            background: 'rgba(196,18,48,0.9)',
-            borderRadius: '50%',
-          }} />
-          {/* Left vertex */}
-          <div style={{
-            position:  'absolute',
-            left:      -3,
-            top:       '50%',
-            transform: 'translateY(-50%)',
-            width:     4, height: 4,
-            background: 'rgba(196,18,48,0.9)',
-            borderRadius: '50%',
-          }} />
-          {/* Right vertex */}
-          <div style={{
-            position:  'absolute',
-            right:     -3,
-            top:       '50%',
-            transform: 'translateY(-50%)',
-            width:     4, height: 4,
-            background: 'rgba(196,18,48,0.9)',
-            borderRadius: '50%',
-          }} />
+          {/* Vertex accent dots */}
+          {[
+            { top: -3,    left: '50%',  transform: 'translateX(-50%)' },
+            { bottom: -3, left: '50%',  transform: 'translateX(-50%)' },
+            { top: '50%', left: -3,     transform: 'translateY(-50%)' },
+            { top: '50%', right: -3,    transform: 'translateY(-50%)' },
+          ].map((s, j) => (
+            <div key={j} style={{
+              position: 'absolute', ...s,
+              width: 6, height: 6,
+              background: 'rgba(196,18,48,0.95)',
+              borderRadius: '50%',
+            }} />
+          ))}
         </div>
       ))}
     </div>

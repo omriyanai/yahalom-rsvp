@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
+import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import SignIn from '@/components/SignIn'
 import { getEvents, getMembers, getAllRSVPs, getAdminOverrides, type Member, type Event, type RSVPRecord, type AdminOverride } from '@/lib/googleSheets'
 
@@ -88,6 +89,8 @@ export default async function AuditPage() {
 
   return (
     <main className="min-h-screen">
+      <DiamondPhotoBackground />
+      <div className="relative" style={{ zIndex: 2 }}>
       <Header member={member} />
       <div className="max-w-4xl mx-auto px-4 py-10">
 
@@ -279,6 +282,7 @@ export default async function AuditPage() {
           </div>
         )}
 
+      </div>
       </div>
     </main>
   )

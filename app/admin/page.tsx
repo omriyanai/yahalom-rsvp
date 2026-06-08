@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
+import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import SignIn from '@/components/SignIn'
 import AdminOverrideButton from '@/components/AdminOverrideButton'
 import {
@@ -105,6 +106,8 @@ export default async function AdminPage() {
 
   return (
     <main className="min-h-screen">
+      <DiamondPhotoBackground />
+      <div className="relative" style={{ zIndex: 2 }}>
       <Header member={admin} />
       <div className="max-w-3xl mx-auto px-4 py-10">
 
@@ -233,6 +236,7 @@ export default async function AdminPage() {
             )
           })}
         </div>
+      </div>
       </div>
     </main>
   )
