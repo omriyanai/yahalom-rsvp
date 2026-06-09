@@ -93,7 +93,7 @@ export default async function Home() {
         </div>
 
         <footer className="text-center text-xs pb-8 mt-4" style={{ color: '#374151' }}>
-        עמותת יהלום © {new Date().getFullYear()}
+        תוכנית מנטורינג עמותת יהלום © {new Date().getFullYear()}
       </footer>
       </div>
     </main>
