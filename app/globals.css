@@ -30,6 +30,22 @@ body {
   }
 }
 
+@keyframes floatUpLeft {
+  0%   { transform: translateY(0)        translateX(0)      rotate(45deg) scale(1);   opacity: 0; }
+  8%   { opacity: 1; }
+  50%  { transform: translateY(-55vh)    translateX(-18px)  rotate(105deg) scale(0.85); }
+  92%  { opacity: 0.35; }
+  100% { transform: translateY(-112vh)   translateX(-30px)  rotate(145deg) scale(0.15); opacity: 0; }
+}
+
+@keyframes floatUpRight {
+  0%   { transform: translateY(0)        translateX(0)      rotate(45deg) scale(1);   opacity: 0; }
+  8%   { opacity: 1; }
+  50%  { transform: translateY(-55vh)    translateX(20px)   rotate(0deg)  scale(0.9); }
+  92%  { opacity: 0.35; }
+  100% { transform: translateY(-112vh)   translateX(35px)   rotate(-50deg) scale(0.15); opacity: 0; }
+}
+
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.25; }
   50%       { opacity: 0.45; }
