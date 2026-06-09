@@ -76,7 +76,7 @@ const DIAMONDS: Diamond[] = [
     size:    260, top: '93vh', left: '14vw', opacity: 0.36, delay: '0.4s',
   },
   {
-    src:     'https://upload.wikimedia.org/wikipedia/commons/f/f2/Flickr_-_Israel_Defense_Forces_-_Yahalom_Training_in_Close_Quarters_%284%29.jpg',
+    src:     'https://upload.wikimedia.org/wikipedia/commons/5/5a/Talon-EOD-robot--Independence-Day-2018-IZE-136.jpg',
     size:    260, top: '94vh', left: '79vw', opacity: 0.36, delay: '3.6s',
   },
 
@@ -126,7 +126,7 @@ export default function DiamondPhotoBackground() {
               backgroundImage:    `url("${d.src}")`,
               backgroundSize:     'cover',
               backgroundPosition: 'center',
-              filter:             'brightness(0.70) saturate(0.65) contrast(1.05) blur(1.5px)',
+              filter:             'brightness(0.70) saturate(0.65) contrast(1.05) blur(1px)',
               clipPath:           'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
             }} />
 
