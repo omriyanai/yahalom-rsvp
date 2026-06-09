@@ -214,7 +214,7 @@ export default function SignIn() {
                 </svg>
                 <p className="text-xs" style={{ color: '#4B5563' }}>רק מוזמנים רשומים יכולים להיכנס למערכת</p>
               </div>
-              <p className="text-[11px]" style={{ color: '#2D3748' }}>עמותת יהלום © {new Date().getFullYear()}</p>
+              <p className="text-[11px]" style={{ color: '#2D3748' }}>תוכנית מנטורינג עמותת יהלום © {new Date().getFullYear()}</p>
             </div>
 
           </div>{/* /card inner */}
