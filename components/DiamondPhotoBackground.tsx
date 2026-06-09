@@ -126,7 +126,7 @@ export default function DiamondPhotoBackground() {
               backgroundImage:    `url("${d.src}")`,
               backgroundSize:     'cover',
               backgroundPosition: 'center',
-              filter:             'brightness(0.70) saturate(0.65) contrast(1.05) blur(3px)',
+              filter:             'brightness(0.70) saturate(0.65) contrast(1.05) blur(1.5px)',
               clipPath:           'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
             }} />
 
