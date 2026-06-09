@@ -3,6 +3,7 @@ import Header from '@/components/Header'
 import EventCard from '@/components/EventCard'
 import SignIn from '@/components/SignIn'
 import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
+import TourGuide from '@/components/TourGuide'
 import { getEvents, type Member } from '@/lib/googleSheets'
 
 export const dynamic = 'force-dynamic'
@@ -15,6 +16,7 @@ export default async function Home() {
     <main className="min-h-screen">
       <DiamondPhotoBackground />
       <div className="relative" style={{ zIndex: 2 }}><SignIn /></div>
+      <TourGuide phase="login" />
     </main>
   )
 
@@ -32,6 +34,7 @@ export default async function Home() {
       <main className="min-h-screen">
         <DiamondPhotoBackground />
         <div className="relative" style={{ zIndex: 2 }}><SignIn /></div>
+        <TourGuide phase="login" />
       </main>
     )
   }
@@ -51,6 +54,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen">
       <DiamondPhotoBackground />
+      <TourGuide phase="main" />
       <div className="relative" style={{ zIndex: 2 }}>
       <Header member={member} />
 
@@ -80,9 +84,9 @@ export default async function Home() {
               <p style={{ color: '#374151', fontSize: '0.875rem', marginTop: '0.5rem' }}>בקרוב יתווספו אירועים חדשים</p>
             </div>
           ) : (
-            <div className="space-y-8">
-              {events.map((event) => (
-                <EventCard key={event.id} event={event} member={member} />
+            <div id="tour-events-list" className="space-y-8">
+              {events.map((event, i) => (
+                <EventCard key={event.id} event={event} member={member} isFirst={i === 0} />
               ))}
             </div>
           )}

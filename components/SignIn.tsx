@@ -128,6 +128,7 @@ export default function SignIn() {
               {/* Email input */}
               <div className="relative">
                 <input
+                  id="tour-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -170,6 +171,7 @@ export default function SignIn() {
 
               {/* Submit button */}
               <button
+                id="tour-login-btn"
                 type="submit"
                 disabled={!canSubmit}
                 className="relative w-full overflow-hidden rounded-xl py-[14px] font-bold text-white text-[1.05rem] transition-all duration-300 group"

@@ -58,7 +58,7 @@ function formatHebrewDate(dateStr: string): string {
   })
 }
 
-export default function EventCard({ event, member }: { event: Event; member: Member }) {
+export default function EventCard({ event, member, isFirst }: { event: Event; member: Member; isFirst?: boolean }) {
   const [showForm, setShowForm] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [attending, setAttending] = useState<'yes' | 'no' | null>(null)
@@ -93,6 +93,7 @@ export default function EventCard({ event, member }: { event: Event; member: Mem
 
   return (
     <div
+      id={isFirst ? 'tour-event-card' : undefined}
       className="relative rounded-2xl overflow-hidden"
       style={{
         background:           'rgba(9,11,20,0.84)',
@@ -216,6 +217,7 @@ export default function EventCard({ event, member }: { event: Event; member: Mem
           </div>
         ) : !showForm ? (
           <button
+            id={isFirst ? 'tour-rsvp-btn' : undefined}
             onClick={() => setShowForm(true)}
             className="relative w-full overflow-hidden rounded-xl py-3.5 font-bold text-white text-lg transition-all duration-300 group"
             style={{
