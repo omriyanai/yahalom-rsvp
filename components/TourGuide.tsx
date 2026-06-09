@@ -112,7 +112,7 @@ const LOGIN_STEPS: Step[] = [
     target:     'body',
     placement:  'center',
     skipBeacon: true,
-    title:      '👋 ברוכים הבאים לעמותת יהלום!',
+    title:      '👋 ברוכים הבאים לתוכנית המנטורינג של עמותת יהלום!',
     content:    'בואו נעשה סיור קצר שיעזור לכם להתחיל. זה ייקח פחות מדקה.',
   },
   {
