@@ -110,10 +110,7 @@ export default async function ContactsPage() {
                           <p className="font-semibold text-sm" style={{ color: '#F9FAFB' }}>
                             {m.firstName} {m.lastName}
                           </p>
-                          {m.phone
-                            ? <p className="text-xs" style={{ color: '#9CA3AF' }} dir="ltr">{m.phone}</p>
-                            : <p className="text-xs" style={{ color: '#4B5563' }}>{m.email}</p>
-                          }
+                          <p className="text-xs" style={{ color: '#4B5563' }}>{m.email}</p>
                         </div>
                       </div>
 
