@@ -44,19 +44,7 @@ export default function SignIn() {
       ══════════════════════════════════════ */}
       <div className="relative z-10 w-full max-w-[420px] px-5 py-8">
         <div
-          className="relative rounded-[28px] overflow-hidden"
-          style={{
-            background:        'rgba(9, 11, 20, 0.84)',
-            backdropFilter:    'blur(28px)',
-            WebkitBackdropFilter: 'blur(28px)',
-            border:            '1px solid rgba(255,255,255,0.07)',
-            boxShadow: [
-              '0 0 90px rgba(196,18,48,0.10)',
-              '0 40px 80px rgba(0,0,0,0.75)',
-              'inset 0 1px 0 rgba(255,255,255,0.07)',
-              'inset 0 -1px 0 rgba(0,0,0,0.4)',
-            ].join(', '),
-          }}
+          className="relative rounded-[28px] overflow-hidden liquid-glass"
         >
 
           {/* ── Tactical corner brackets ── */}

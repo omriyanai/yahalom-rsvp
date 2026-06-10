@@ -1,20 +1,10 @@
 /**
  * DiamondPhotoBackground
  * ──────────────────────
- * Decorative fixed layer — shown on ALL pages (authenticated + login).
- * Photos hug the left/right edges of the viewport so they never overlap
- * the centered page content or the login box.
- *
- * Layout (11 diamonds spread across full screen, 5 rows):
- *
- *   [TL]        [TC]        [TR]       ← top row
- *       [UML]        [UMR]             ← upper-middle
- *   [CL]                  [CR]         ← center (edges)
- *         [LML]      [LMR]            ← lower-middle
- *   [BL]                  [BR]         ← bottom row
+ * Decorative fixed layer — shown on all authenticated pages.
+ * Diamond sizes use min(px, 19vw) so they shrink proportionally
+ * on browser zoom and never overlap.
  */
-
-const BORDER = 10   // px — red border ring thickness
 
 interface Diamond {
   src:     string
@@ -79,8 +69,9 @@ const DIAMONDS: Diamond[] = [
     src:     'https://upload.wikimedia.org/wikipedia/commons/5/5a/Talon-EOD-robot--Independence-Day-2018-IZE-136.jpg',
     size:    260, top: '94vh', left: '79vw', opacity: 0.36, delay: '3.6s',
   },
-
 ]
+
+const BORDER_RING = 10 // px — used only for the vw-capped size formula
 
 export default function DiamondPhotoBackground() {
   return (
@@ -90,7 +81,10 @@ export default function DiamondPhotoBackground() {
       style={{ zIndex: 1 }}
     >
       {DIAMONDS.map((d, i) => {
-        const box = d.size + BORDER * 2
+        const box = d.size + BORDER_RING * 2
+        // Responsive: shrink to 19vw on small/zoomed viewports, capped at box px
+        const outerSize = `min(${box}px, 19vw)`
+
         return (
           <div
             key={i}
@@ -98,8 +92,8 @@ export default function DiamondPhotoBackground() {
             style={{
               top:            d.top,
               left:           d.left,
-              width:          box,
-              height:         box,
+              width:          outerSize,
+              height:         outerSize,
               transform:      'translate(-50%, -50%)',
               opacity:        d.opacity,
               animationDelay: d.delay,
@@ -114,7 +108,7 @@ export default function DiamondPhotoBackground() {
 
             {/* Inner highlight */}
             <div style={{
-              position: 'absolute', inset: BORDER - 1,
+              position: 'absolute', inset: '3.2%',
               background: 'rgba(255,255,255,0.10)',
               clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
             }} />
@@ -122,7 +116,7 @@ export default function DiamondPhotoBackground() {
             {/* Photo */}
             <div style={{
               position:           'absolute',
-              top: BORDER, left: BORDER, right: BORDER, bottom: BORDER,
+              inset:              '3.5%',
               backgroundImage:    `url("${d.src}")`,
               backgroundSize:     'cover',
               backgroundPosition: 'center',
@@ -133,21 +127,21 @@ export default function DiamondPhotoBackground() {
             {/* Vignette */}
             <div style={{
               position: 'absolute',
-              top: BORDER, left: BORDER, right: BORDER, bottom: BORDER,
+              inset:    '3.5%',
               background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,8,15,0.65) 100%)',
               clipPath:   'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
             }} />
 
-            {/* Vertex dots */}
+            {/* Vertex dots — percentage-based so they scale with the diamond */}
             {[
-              { top: -3,    left: '50%',  transform: 'translateX(-50%)' },
-              { bottom: -3, left: '50%',  transform: 'translateX(-50%)' },
-              { top: '50%', left: -3,     transform: 'translateY(-50%)' },
-              { top: '50%', right: -3,    transform: 'translateY(-50%)' },
+              { top: '-1%',  left: '50%',  transform: 'translateX(-50%)' },
+              { bottom: '-1%', left: '50%', transform: 'translateX(-50%)' },
+              { top: '50%',  left: '-1%',  transform: 'translateY(-50%)' },
+              { top: '50%',  right: '-1%', transform: 'translateY(-50%)' },
             ].map((s, j) => (
               <div key={j} style={{
                 position: 'absolute', ...s,
-                width: 5, height: 5,
+                width: 'max(4px, 1.5%)', height: 'max(4px, 1.5%)',
                 background: 'rgba(196,18,48,0.95)',
                 borderRadius: '50%',
               }} />

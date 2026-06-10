@@ -26,12 +26,7 @@ export default function CommunityPage() {
           </Link>
 
           {/* Coming soon card */}
-          <div className="rounded-2xl p-10 text-center" style={{
-            background:     'rgba(9,11,20,0.84)',
-            backdropFilter: 'blur(28px)',
-            border:         '1px solid rgba(255,255,255,0.07)',
-            boxShadow:      '0 0 60px rgba(196,18,48,0.07), 0 24px 48px rgba(0,0,0,0.6)',
-          }}>
+          <div className="rounded-2xl p-10 text-center liquid-glass">
             {/* Animated diamond */}
             <div className="flex justify-center mb-6">
               <div style={{

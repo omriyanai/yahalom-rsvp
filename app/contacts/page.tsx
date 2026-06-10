@@ -81,12 +81,7 @@ export default async function ContactsPage() {
                 </div>
 
                 {/* Members list */}
-                <div className="rounded-2xl overflow-hidden" style={{
-                  background:     'rgba(9,11,20,0.84)',
-                  backdropFilter: 'blur(28px)',
-                  border:         '1px solid rgba(255,255,255,0.07)',
-                  boxShadow:      '0 0 40px rgba(196,18,48,0.05), 0 16px 32px rgba(0,0,0,0.5)',
-                }}>
+                <div className="rounded-2xl overflow-hidden liquid-glass">
                   {grouped[cat].map((m, idx) => (
                     <div
                       key={m.id}
@@ -148,9 +143,7 @@ export default async function ContactsPage() {
           })}
 
             {members.length === 0 && (
-              <div className="rounded-2xl p-10 text-center" style={{
-                background: 'rgba(9,11,20,0.84)', border: '1px solid rgba(255,255,255,0.07)',
-              }}>
+              <div className="rounded-2xl p-10 text-center liquid-glass">
                 <p style={{ color: '#6B7280' }}>לא נמצאו משתתפים</p>
               </div>
             )}

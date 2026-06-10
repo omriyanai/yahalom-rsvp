@@ -83,18 +83,9 @@ export default function Home() {
               <Link
                 key={s.href}
                 href={s.href}
-                className="group relative rounded-2xl overflow-hidden transition-all duration-300 focus:outline-none"
+                className="group relative rounded-2xl overflow-hidden transition-all duration-300 focus:outline-none liquid-glass"
                 style={{
-                  background:           'rgba(9,11,20,0.84)',
-                  backdropFilter:       'blur(28px)',
-                  WebkitBackdropFilter: 'blur(28px)',
-                  border:               s.active
-                    ? '1px solid rgba(196,18,48,0.25)'
-                    : '1px solid rgba(255,255,255,0.06)',
-                  boxShadow: s.active
-                    ? '0 0 40px rgba(196,18,48,0.07), 0 16px 32px rgba(0,0,0,0.5)'
-                    : '0 8px 24px rgba(0,0,0,0.4)',
-                  opacity: s.active ? 1 : 0.6,
+                  opacity: s.active ? 1 : 0.5,
                   cursor:  s.active ? 'pointer' : 'default',
                   pointerEvents: s.active ? 'auto' : 'none',
                 }}

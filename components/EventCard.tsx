@@ -95,19 +95,7 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
   return (
     <div
       id={isFirst ? 'tour-event-card' : undefined}
-      className="relative rounded-2xl overflow-hidden"
-      style={{
-        background:           'rgba(9,11,20,0.84)',
-        backdropFilter:       'blur(28px)',
-        WebkitBackdropFilter: 'blur(28px)',
-        border:               '1px solid rgba(255,255,255,0.07)',
-        boxShadow: [
-          '0 0 60px rgba(196,18,48,0.08)',
-          '0 24px 48px rgba(0,0,0,0.6)',
-          'inset 0 1px 0 rgba(255,255,255,0.06)',
-          'inset 0 -1px 0 rgba(0,0,0,0.3)',
-        ].join(', '),
-      }}
+      className="relative rounded-2xl overflow-hidden liquid-glass"
     >
       {/* Top gradient accent line */}
       <div

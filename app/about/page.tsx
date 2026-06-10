@@ -59,12 +59,7 @@ export default function AboutPage() {
 
           <div className="space-y-4">
             {INFO_BLOCKS.map((block, i) => (
-              <div key={i} className="rounded-2xl p-6" style={{
-                background:     'rgba(9,11,20,0.84)',
-                backdropFilter: 'blur(28px)',
-                border:         '1px solid rgba(255,255,255,0.07)',
-                boxShadow:      '0 0 40px rgba(196,18,48,0.05), 0 16px 32px rgba(0,0,0,0.5)',
-              }}>
+              <div key={i} className="rounded-2xl p-6 liquid-glass">
                 <div className="flex items-center gap-3 mb-3">
                   <Diamond size={9} fill="#C41230" style={{ color: '#C41230', flexShrink: 0 }} />
                   <h3 className="font-bold text-base" style={{ color: '#F9FAFB' }}>{block.title}</h3>
