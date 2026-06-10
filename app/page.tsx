@@ -4,33 +4,40 @@ import Header from '@/components/Header'
 import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import TourGuide from '@/components/TourGuide'
 import { getMemberFromCookie } from '@/lib/auth'
+import { CalendarDays, PhoneCall, Users, BookOpen, ChevronLeft, LockKeyhole, type LucideIcon } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
-const SECTIONS = [
+const SECTIONS: Array<{
+  icon: LucideIcon
+  title: string
+  subtitle: string
+  href: string
+  active: boolean
+}> = [
   {
-    emoji:    '📅',
+    icon:     CalendarDays,
     title:    'אירועי תוכנית מנטורינג מחזור נוכחי',
     subtitle: 'אישור הגעה לאירועים הקרובים',
     href:     '/events',
     active:   true,
   },
   {
-    emoji:    '📞',
+    icon:     PhoneCall,
     title:    'דף קשר מחזור נוכחי',
     subtitle: 'פרטי קשר של משתתפי התוכנית',
     href:     '/contacts',
     active:   true,
   },
   {
-    emoji:    '🤝',
+    icon:     Users,
     title:    'קהילת המנטורינג של יהל"ם',
     subtitle: 'הדף בבנייה — בקרוב!',
     href:     '/community',
     active:   false,
   },
   {
-    emoji:    'ℹ️',
+    icon:     BookOpen,
     title:    'אודות התוכנית',
     subtitle: 'מידע על תוכנית המנטורינג',
     href:     '/about',
@@ -118,8 +125,10 @@ export default function Home() {
                 <div className="p-6">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
-                      {/* Emoji */}
-                      <div className="text-3xl mb-3">{s.emoji}</div>
+                      {/* Icon */}
+                      <div className="mb-3">
+                        <s.icon size={26} style={{ color: s.active ? '#C41230' : '#4B5563' }} strokeWidth={1.6} />
+                      </div>
 
                       {/* Title */}
                       <h3 className="font-bold text-base leading-snug mb-2" style={{ color: '#F9FAFB' }}>
@@ -141,9 +150,7 @@ export default function Home() {
                           border:     '1px solid rgba(196,18,48,0.3)',
                         }}
                       >
-                        <svg className="w-4 h-4" style={{ color: '#C41230' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
+                        <ChevronLeft size={16} style={{ color: '#C41230' }} strokeWidth={2.2} />
                       </div>
                     )}
 
@@ -151,9 +158,7 @@ export default function Home() {
                     {!s.active && (
                       <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-1"
                         style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                        <svg className="w-4 h-4" style={{ color: '#4B5563' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
+                        <LockKeyhole size={15} style={{ color: '#4B5563' }} strokeWidth={1.8} />
                       </div>
                     )}
                   </div>

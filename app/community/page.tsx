@@ -3,6 +3,7 @@ import Header from '@/components/Header'
 import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import { getMemberFromCookie } from '@/lib/auth'
 import Link from 'next/link'
+import { ChevronRight, Users } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,9 +21,7 @@ export default function CommunityPage() {
 
           <Link href="/" className="inline-flex items-center gap-2 mb-7 text-sm"
             style={{ color: '#6B7280' }}>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight size={16} strokeWidth={2} />
             חזרה לתפריט
           </Link>
 
@@ -45,8 +44,9 @@ export default function CommunityPage() {
               }} />
             </div>
 
-            <h2 className="text-2xl font-bold mb-3" style={{ color: '#F9FAFB' }}>
-              🤝 קהילת המנטורינג של יהל&quot;ם
+            <h2 className="text-2xl font-bold mb-3 flex items-center justify-center gap-3" style={{ color: '#F9FAFB' }}>
+              <Users size={26} style={{ color: '#C41230' }} strokeWidth={1.6} />
+              קהילת המנטורינג של יהל&quot;ם
             </h2>
             <p className="text-lg mb-2" style={{ color: '#C41230', fontWeight: 600 }}>
               הדף בבנייה

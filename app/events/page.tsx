@@ -5,6 +5,7 @@ import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import { getMemberFromCookie } from '@/lib/auth'
 import { getEvents } from '@/lib/googleSheets'
 import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,9 +36,7 @@ export default async function EventsPage() {
           {/* Back button */}
           <Link href="/" className="inline-flex items-center gap-2 mb-7 text-sm transition-colors"
             style={{ color: '#6B7280' }}>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight size={16} strokeWidth={2} />
             חזרה לתפריט
           </Link>
 

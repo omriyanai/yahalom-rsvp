@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { CalendarDays, Clock, MapPin, MessageSquare, CalendarPlus, CalendarRange, Navigation2, Check, X } from 'lucide-react'
 import type { Event, Member } from '@/lib/googleSheets'
 
 function getEndTime(event: Event): { compact: string; iso: string } {
@@ -137,20 +138,20 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
         {/* Event details */}
         <div className="space-y-2.5 mb-6 text-[15px]" style={{ color: '#9CA3AF' }}>
           <div className="flex items-center gap-3">
-            <span className="text-lg flex-shrink-0">📅</span>
+            <CalendarDays size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
             <span className="font-medium">{formatHebrewDate(event.date)}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-lg flex-shrink-0">🕐</span>
+            <Clock size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
             <span>{event.time}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-lg flex-shrink-0">📍</span>
+            <MapPin size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
             <span>{event.location}</span>
           </div>
           {event.description && (
             <div className="flex items-start gap-3 mt-1">
-              <span className="text-lg mt-0.5 flex-shrink-0">💬</span>
+              <MessageSquare size={15} className="flex-shrink-0 mt-0.5" style={{ color: 'rgba(196,18,48,0.55)' }} />
               <span className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{event.description}</span>
             </div>
           )}
@@ -169,9 +170,7 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
               color:      '#00D4FF',
             }}
           >
-            <svg width="16" height="16" viewBox="0 0 48 48" fill="none">
-              <path d="M24 5C14.06 5 6 12.61 6 22c0 6.09 3.31 11.43 8.28 14.48L13 43l6.5-2.5C21 41 22.49 41.2 24 41.2c9.94 0 18-7.61 18-17.2S33.94 5 24 5z" fill="currentColor" fillOpacity="0.8"/>
-            </svg>
+            <Navigation2 size={14} />
             ניווט ב-Waze
           </a>
           <a
@@ -185,7 +184,8 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
               color:      '#6BA3F5',
             }}
           >
-            📆 Google Calendar
+            <CalendarPlus size={14} />
+            Google Calendar
           </a>
           <a
             href={outlookCalendarUrl}
@@ -198,7 +198,8 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
               color:      '#5BA3E0',
             }}
           >
-            📅 Outlook
+            <CalendarRange size={14} />
+            Outlook
           </a>
         </div>
 
@@ -211,8 +212,10 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
               border:     `1px solid ${attending === 'yes' ? 'rgba(34,197,94,0.25)' : 'rgba(255,255,255,0.08)'}`,
             }}
           >
-            <p className="font-bold text-xl" style={{ color: attending === 'yes' ? '#4ADE80' : '#6B7280' }}>
-              {attending === 'yes' ? '✓ תודה! נתראה בקרוב 🎉' : 'הרשמנו שלא תגיע. תודה על העדכון'}
+            <p className="font-bold text-xl flex items-center justify-center gap-2" style={{ color: attending === 'yes' ? '#4ADE80' : '#6B7280' }}>
+              {attending === 'yes'
+                ? <><Check size={22} strokeWidth={2.5} /> תודה! נתראה בקרוב</>
+                : <><X size={20} strokeWidth={2} /> הרשמנו שלא תגיע. תודה על העדכון</>}
             </p>
           </div>
         ) : !showForm ? (
@@ -249,7 +252,7 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
                   color:      '#4ADE80',
                 }}
               >
-                {loading && attending === 'yes' ? '...' : 'כן, מגיע ✓'}
+                {loading && attending === 'yes' ? '...' : <span className="flex items-center justify-center gap-2"><Check size={18} strokeWidth={2.5} /> כן, מגיע</span>}
               </button>
               <button
                 onClick={() => handleQuickRSVP('no')}
@@ -261,7 +264,7 @@ export default function EventCard({ event, member, isFirst }: { event: Event; me
                   color:      '#9CA3AF',
                 }}
               >
-                {loading && attending === 'no' ? '...' : 'לא מגיע ✗'}
+                {loading && attending === 'no' ? '...' : <span className="flex items-center justify-center gap-2"><X size={18} strokeWidth={2} /> לא מגיע</span>}
               </button>
             </div>
           </div>

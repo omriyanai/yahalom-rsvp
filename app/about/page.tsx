@@ -3,6 +3,7 @@ import Header from '@/components/Header'
 import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import { getMemberFromCookie } from '@/lib/auth'
 import Link from 'next/link'
+import { ChevronRight, Diamond } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,9 +44,7 @@ export default function AboutPage() {
 
           <Link href="/" className="inline-flex items-center gap-2 mb-7 text-sm"
             style={{ color: '#6B7280' }}>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight size={16} strokeWidth={2} />
             חזרה לתפריט
           </Link>
 
@@ -67,7 +66,7 @@ export default function AboutPage() {
                 boxShadow:      '0 0 40px rgba(196,18,48,0.05), 0 16px 32px rgba(0,0,0,0.5)',
               }}>
                 <div className="flex items-center gap-3 mb-3">
-                  <span style={{ color: '#C41230', fontSize: 10 }}>◆</span>
+                  <Diamond size={9} fill="#C41230" style={{ color: '#C41230', flexShrink: 0 }} />
                   <h3 className="font-bold text-base" style={{ color: '#F9FAFB' }}>{block.title}</h3>
                 </div>
                 <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>{block.body}</p>

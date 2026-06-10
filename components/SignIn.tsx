@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { Mail, AlertCircle, ArrowLeft, Lock } from 'lucide-react'
 
 export default function SignIn() {
   const [email,   setEmail]   = useState('')
@@ -148,11 +149,7 @@ export default function SignIn() {
                   }}
                 />
                 <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 transition-colors duration-300" style={{ color: focused ? 'rgba(196,18,48,0.7)' : '#4B5563' }}
-                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
+                  <Mail size={16} className="transition-colors duration-300" style={{ color: focused ? 'rgba(196,18,48,0.7)' : '#4B5563' }} />
                 </div>
               </div>
 
@@ -160,11 +157,7 @@ export default function SignIn() {
               {error && (
                 <div className="flex items-center gap-3 rounded-xl px-4 py-[11px]"
                   style={{ background: 'rgba(196,18,48,0.09)', border: '1px solid rgba(196,18,48,0.28)' }}>
-                  <svg className="w-4 h-4 flex-shrink-0" style={{ color: '#F87171' }}
-                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <AlertCircle size={16} className="flex-shrink-0" style={{ color: '#F87171' }} />
                   <p className="text-sm font-medium" style={{ color: '#F87171' }}>{error}</p>
                 </div>
               )}
@@ -196,9 +189,7 @@ export default function SignIn() {
                   ) : (
                     <>
                       כניסה
-                      <svg className="w-5 h-5" style={{ transform: 'scaleX(-1)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
+                      <ArrowLeft size={18} />
                     </>
                   )}
                 </span>
@@ -208,10 +199,7 @@ export default function SignIn() {
             {/* ── Footer disclaimer ── */}
             <div className="mt-8 pt-6 text-center space-y-1" style={{ borderTop: '1px solid rgba(255,255,255,0.055)' }}>
               <div className="flex items-center justify-center gap-2">
-                <svg className="w-[13px] h-[13px]" style={{ color: '#374151' }} fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" clipRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" />
-                </svg>
+                <Lock size={12} style={{ color: '#374151' }} />
                 <p className="text-xs" style={{ color: '#4B5563' }}>רק מוזמנים רשומים יכולים להיכנס למערכת</p>
               </div>
               <p className="text-[11px]" style={{ color: '#2D3748' }}>תוכנית מנטורינג עמותת יהלום © {new Date().getFullYear()}</p>

@@ -4,13 +4,14 @@ import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import { getMemberFromCookie } from '@/lib/auth'
 import { getMembers } from '@/lib/googleSheets'
 import Link from 'next/link'
+import { GraduationCap, Star, Shield, Phone, Mail, ChevronRight, type LucideIcon } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
-const CATEGORY_LABELS: Record<string, string> = {
-  'מנטור': '🎓 מנטורים',
-  'מנטי':  '⭐ מנטים',
-  'צוות':  '🛡️ צוות',
+const CATEGORY_LABELS: Record<string, { label: string; icon: LucideIcon }> = {
+  'מנטור': { label: 'מנטורים', icon: GraduationCap },
+  'מנטי':  { label: 'מנטים',   icon: Star },
+  'צוות':  { label: 'צוות',    icon: Shield },
 }
 
 export default async function ContactsPage() {
@@ -49,9 +50,7 @@ export default async function ContactsPage() {
           {/* Back */}
           <Link href="/" className="inline-flex items-center gap-2 mb-7 text-sm transition-colors"
             style={{ color: '#6B7280' }}>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight size={16} strokeWidth={2} />
             חזרה לתפריט
           </Link>
 
@@ -66,12 +65,16 @@ export default async function ContactsPage() {
 
           {/* Contact groups */}
           <div className="space-y-6">
-            {sortedCategories.map(cat => (
+            {sortedCategories.map(cat => {
+              const catInfo = CATEGORY_LABELS[cat]
+              const CatIcon = catInfo?.icon
+              return (
               <div key={cat}>
                 {/* Category header */}
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold" style={{ color: '#C41230' }}>
-                    {CATEGORY_LABELS[cat] ?? cat}
+                  <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: '#C41230' }}>
+                    {CatIcon && <CatIcon size={18} strokeWidth={1.8} />}
+                    {catInfo?.label ?? cat}
                   </h3>
                   <div className="flex-1 h-px" style={{ background: 'rgba(196,18,48,0.25)' }} />
                   <span className="text-xs" style={{ color: '#4B5563' }}>{grouped[cat].length} חברים</span>
@@ -124,10 +127,7 @@ export default async function ContactsPage() {
                             style={{ background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.25)' }}
                             title={`התקשר ל-${m.firstName}`}
                           >
-                            <svg className="w-4 h-4" style={{ color: '#4ADE80' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                            </svg>
+                            <Phone size={15} strokeWidth={1.8} style={{ color: '#4ADE80' }} />
                           </a>
                         )}
                         {/* Email */}
@@ -137,17 +137,15 @@ export default async function ContactsPage() {
                           style={{ background: 'rgba(196,18,48,0.10)', border: '1px solid rgba(196,18,48,0.2)' }}
                           title={`שלח אימייל ל-${m.firstName}`}
                         >
-                          <svg className="w-4 h-4" style={{ color: '#C41230' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                          </svg>
+                          <Mail size={15} strokeWidth={1.8} style={{ color: '#C41230' }} />
                         </a>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-            ))}
+            )
+          })}
 
             {members.length === 0 && (
               <div className="rounded-2xl p-10 text-center" style={{
