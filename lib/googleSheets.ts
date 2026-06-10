@@ -20,6 +20,7 @@ export interface Member {
   lastName: string
   email: string
   category: string  // מנטור | מנטי | צוות
+  phone?: string    // column F (optional)
 }
 
 function parseMembers(rows: string[][]): Member[] {
@@ -31,6 +32,7 @@ function parseMembers(rows: string[][]): Member[] {
       lastName:  row[2] || '',
       email:     (row[3] || '').trim(),
       category:  (row[4] || '').trim(),
+      phone:     (row[5] || '').trim() || undefined,
     }))
 }
 
@@ -39,7 +41,7 @@ export async function getMembers(): Promise<Member[]> {
   const sheets = google.sheets({ version: 'v4', auth })
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: 'Members!A2:E200',
+    range: 'Members!A2:F200',   // extended to column F for phone
   })
   return parseMembers(response.data.values || [])
 }
@@ -49,7 +51,7 @@ export async function getMemberByEmail(email: string): Promise<Member | null> {
   const sheets = google.sheets({ version: 'v4', auth })
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: 'Members!A2:E200',
+    range: 'Members!A2:F200',
   })
   const row = (response.data.values || []).find(
     (r) => r[3]?.toLowerCase() === email.toLowerCase()
