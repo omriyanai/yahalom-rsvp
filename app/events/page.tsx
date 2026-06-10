@@ -29,7 +29,7 @@ export default async function EventsPage() {
     <main className="min-h-screen">
       <DiamondPhotoBackground />
       <div className="relative" style={{ zIndex: 2 }}>
-        <Header member={member} />
+        <Header member={member} showAdminLink={member.category === 'צוות'} />
 
         <div className="max-w-2xl mx-auto px-4 py-10">
 

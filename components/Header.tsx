@@ -1,7 +1,8 @@
 import Image from 'next/image'
+import { Hand } from 'lucide-react'
 import type { Member } from '@/lib/googleSheets'
 
-export default function Header({ member }: { member?: Member }) {
+export default function Header({ member, showAdminLink }: { member?: Member; showAdminLink?: boolean }) {
   return (
     <header
       style={{
@@ -57,10 +58,11 @@ export default function Header({ member }: { member?: Member }) {
         {/* Member info */}
         {member && (
           <div className="flex items-center gap-3 mt-1">
-            <span className="text-sm font-semibold" style={{ color: '#E5E7EB' }}>
-              שלום, {member.firstName} {member.lastName} 👋
+            <span className="text-sm font-semibold flex items-center gap-1.5" style={{ color: '#E5E7EB' }}>
+              שלום, {member.firstName} {member.lastName}
+              <Hand size={15} style={{ color: '#C41230' }} strokeWidth={1.8} />
             </span>
-            {member.category === 'צוות' && (
+            {member.category === 'צוות' && showAdminLink && (
               <a
                 href="/admin"
                 className="transition hover:underline"
