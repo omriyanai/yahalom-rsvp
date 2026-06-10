@@ -80,3 +80,8 @@ body {
 @media (max-width: 900px) {
   .diamond-bg-layer { opacity: 0.85; }
 }
+
+/* Hide diamond photos on phones — too crowded on small screens */
+@media (max-width: 640px) {
+  .diamond-bg-layer { display: none !important; }
+}

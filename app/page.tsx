@@ -1,18 +1,47 @@
-import { cookies } from 'next/headers'
-import Header from '@/components/Header'
-import EventCard from '@/components/EventCard'
+import Link from 'next/link'
 import SignIn from '@/components/SignIn'
+import Header from '@/components/Header'
 import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import TourGuide from '@/components/TourGuide'
-import { getEvents, type Member } from '@/lib/googleSheets'
+import { getMemberFromCookie } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
-export default async function Home() {
-  const cookieStore = cookies()
-  const memberCookie = cookieStore.get('yahalom_member')
+const SECTIONS = [
+  {
+    emoji:    '📅',
+    title:    'אירועי תוכנית מנטורינג מחזור נוכחי',
+    subtitle: 'אישור הגעה לאירועים הקרובים',
+    href:     '/events',
+    active:   true,
+  },
+  {
+    emoji:    '📞',
+    title:    'דף קשר מחזור נוכחי',
+    subtitle: 'פרטי קשר של משתתפי התוכנית',
+    href:     '/contacts',
+    active:   true,
+  },
+  {
+    emoji:    '🤝',
+    title:    'קהילת המנטורינג של יהל"ם',
+    subtitle: 'הדף בבנייה — בקרוב!',
+    href:     '/community',
+    active:   false,
+  },
+  {
+    emoji:    'ℹ️',
+    title:    'אודות התוכנית',
+    subtitle: 'מידע על תוכנית המנטורינג',
+    href:     '/about',
+    active:   true,
+  },
+]
 
-  if (!memberCookie) return (
+export default function Home() {
+  const member = getMemberFromCookie()
+
+  if (!member) return (
     <main className="min-h-screen">
       <DiamondPhotoBackground />
       <div className="relative" style={{ zIndex: 2 }}><SignIn /></div>
@@ -20,81 +49,123 @@ export default async function Home() {
     </main>
   )
 
-  let member: Member
-  try {
-    member = JSON.parse(memberCookie.value)
-  } catch {
-    return <SignIn />
-  }
-
-  // If cookie is old (missing category), force re-login to get fresh data
-  if (!member.category) {
-    cookieStore.delete('yahalom_member')
-    return (
-      <main className="min-h-screen">
-        <DiamondPhotoBackground />
-        <div className="relative" style={{ zIndex: 2 }}><SignIn /></div>
-        <TourGuide phase="login" />
-      </main>
-    )
-  }
-
-  let events: Awaited<ReturnType<typeof getEvents>> = []
-  try {
-    const all = await getEvents()
-    events = all.filter(e =>
-      member.category === 'צוות' ||   // staff sees everything
-      e.categories.length === 0 ||     // no filter set = everyone
-      e.categories.includes(member.category)
-    )
-  } catch (e) {
-    console.error('Failed to load events:', e)
-  }
-
   return (
     <main className="min-h-screen">
       <DiamondPhotoBackground />
       <TourGuide phase="main" />
       <div className="relative" style={{ zIndex: 2 }}>
-      <Header member={member} />
+        <Header member={member} />
 
         <div className="max-w-2xl mx-auto px-4 py-10">
 
           {/* Page title */}
-          <div className="flex items-center justify-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-4 mb-3">
             <div className="h-px flex-1 max-w-[80px]" style={{ background: 'linear-gradient(to right, transparent, rgba(196,18,48,0.5))' }} />
             <h2 className="text-2xl font-bold tracking-tight text-center" style={{ color: '#F9FAFB' }}>
-              אירועים קרובים
+              תפריט ראשי
             </h2>
             <div className="h-px flex-1 max-w-[80px]" style={{ background: 'linear-gradient(to left, transparent, rgba(196,18,48,0.5))' }} />
           </div>
+          <p className="text-center text-sm mb-10" style={{ color: '#6B7280' }}>
+            שלום, {member.firstName}! מה תרצה לעשות היום?
+          </p>
 
-          {events.length === 0 ? (
-            <div
-              className="rounded-2xl p-10 text-center"
-              style={{
-                background:           'rgba(9,11,20,0.84)',
-                backdropFilter:       'blur(28px)',
-                WebkitBackdropFilter: 'blur(28px)',
-                border:               '1px solid rgba(255,255,255,0.07)',
-                boxShadow:            '0 0 40px rgba(196,18,48,0.07), 0 20px 40px rgba(0,0,0,0.5)',
-              }}
-            >
-              <p style={{ color: '#6B7280', fontSize: '1.1rem' }}>אין אירועים קרובים כרגע</p>
-              <p style={{ color: '#374151', fontSize: '0.875rem', marginTop: '0.5rem' }}>בקרוב יתווספו אירועים חדשים</p>
-            </div>
-          ) : (
-            <div id="tour-events-list" className="space-y-8">
-              {events.map((event, i) => (
-                <EventCard key={event.id} event={event} member={member} isFirst={i === 0} />
-              ))}
-            </div>
-          )}
+          {/* 4 navigation cards */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {SECTIONS.map((s) => (
+              <Link
+                key={s.href}
+                href={s.href}
+                className="group relative rounded-2xl overflow-hidden transition-all duration-300 focus:outline-none"
+                style={{
+                  background:           'rgba(9,11,20,0.84)',
+                  backdropFilter:       'blur(28px)',
+                  WebkitBackdropFilter: 'blur(28px)',
+                  border:               s.active
+                    ? '1px solid rgba(196,18,48,0.25)'
+                    : '1px solid rgba(255,255,255,0.06)',
+                  boxShadow: s.active
+                    ? '0 0 40px rgba(196,18,48,0.07), 0 16px 32px rgba(0,0,0,0.5)'
+                    : '0 8px 24px rgba(0,0,0,0.4)',
+                  opacity: s.active ? 1 : 0.6,
+                  cursor:  s.active ? 'pointer' : 'default',
+                  pointerEvents: s.active ? 'auto' : 'none',
+                }}
+              >
+                {/* Top accent line (only active) */}
+                {s.active && (
+                  <div className="h-[2px]" style={{
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(196,18,48,0.8) 40%, #C41230 60%, rgba(196,18,48,0.8) 80%, transparent 100%)',
+                  }} />
+                )}
+
+                {/* Corner brackets */}
+                <svg className="absolute top-0 right-0 w-8 h-8 pointer-events-none" viewBox="0 0 44 44" fill="none">
+                  <path d="M41 22 L41 3 L22 3" stroke="rgba(196,18,48,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <svg className="absolute bottom-0 left-0 w-8 h-8 pointer-events-none" viewBox="0 0 44 44" fill="none">
+                  <path d="M3 22 L3 41 L22 41" stroke="rgba(196,18,48,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+
+                {/* Hover shimmer */}
+                {s.active && (
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{ background: 'linear-gradient(135deg, rgba(196,18,48,0.04), transparent 60%)' }}
+                  />
+                )}
+
+                <div className="p-6">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      {/* Emoji */}
+                      <div className="text-3xl mb-3">{s.emoji}</div>
+
+                      {/* Title */}
+                      <h3 className="font-bold text-base leading-snug mb-2" style={{ color: '#F9FAFB' }}>
+                        {s.title}
+                      </h3>
+
+                      {/* Subtitle */}
+                      <p className="text-sm" style={{ color: s.active ? '#9CA3AF' : '#6B7280' }}>
+                        {s.subtitle}
+                      </p>
+                    </div>
+
+                    {/* Arrow */}
+                    {s.active && (
+                      <div
+                        className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-1 transition-all duration-300 group-hover:scale-110"
+                        style={{
+                          background: 'rgba(196,18,48,0.15)',
+                          border:     '1px solid rgba(196,18,48,0.3)',
+                        }}
+                      >
+                        <svg className="w-4 h-4" style={{ color: '#C41230' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </div>
+                    )}
+
+                    {/* Lock icon for inactive */}
+                    {!s.active && (
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-1"
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <svg className="w-4 h-4" style={{ color: '#4B5563' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         <footer className="text-center text-xs pb-8 mt-4" style={{ color: '#374151' }}>
-        תוכנית מנטורינג עמותת יהלום © {new Date().getFullYear()}
-      </footer>
+          תוכנית מנטורינג עמותת יהלום © {new Date().getFullYear()}
+        </footer>
       </div>
     </main>
   )
