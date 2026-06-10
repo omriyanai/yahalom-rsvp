@@ -77,23 +77,31 @@ body {
 }
 
 /* ── Liquid glass cards ── */
+@keyframes card-float {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-6px); }
+}
+
 .liquid-glass {
   background: linear-gradient(
     160deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(9, 11, 20, 0.28) 40%,
-    rgba(196, 18, 48, 0.07) 100%
+    rgba(196, 18, 48, 0.10) 0%,
+    rgba(12, 3, 5, 0.30) 45%,
+    rgba(139, 13, 34, 0.07) 100%
   );
-  backdrop-filter: blur(52px) saturate(220%) brightness(1.12);
-  -webkit-backdrop-filter: blur(52px) saturate(220%) brightness(1.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(52px) saturate(160%) brightness(1.06);
+  -webkit-backdrop-filter: blur(52px) saturate(160%) brightness(1.06);
+  border: 1px solid rgba(196, 18, 48, 0.28);
   box-shadow:
-    0 24px 48px rgba(0, 0, 0, 0.42),
-    0 0 60px rgba(196, 18, 48, 0.09),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.38),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
-    inset 1px 0 0 rgba(255, 255, 255, 0.14),
-    inset -1px 0 0 rgba(255, 255, 255, 0.07);
+    0 40px 80px rgba(0, 0, 0, 0.50),
+    0 16px 32px rgba(0, 0, 0, 0.32),
+    0 4px 8px  rgba(0, 0, 0, 0.20),
+    0 0 60px rgba(196, 18, 48, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    inset 1px 0 0 rgba(255, 255, 255, 0.10),
+    inset -1px 0 0 rgba(255, 255, 255, 0.05);
+  animation: card-float 6s ease-in-out infinite;
 }
 
 /* Slightly reduce on tablet — still clearly visible */
