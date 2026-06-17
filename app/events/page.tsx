@@ -3,7 +3,7 @@ import Header from '@/components/Header'
 import EventCard from '@/components/EventCard'
 import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import { getMemberFromCookie } from '@/lib/auth'
-import { getEvents } from '@/lib/googleSheets'
+import { getEvents, getAllRSVPs, getAdminOverrides } from '@/lib/googleSheets'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 
@@ -14,13 +14,37 @@ export default async function EventsPage() {
   if (!member) redirect('/')
 
   let events: Awaited<ReturnType<typeof getEvents>> = []
+  let rsvpMap: Record<string, 'yes' | 'no'> = {}
+
   try {
-    const all = await getEvents()
+    const [all, allRsvps, allOverrides] = await Promise.all([
+      getEvents(),
+      getAllRSVPs(),
+      getAdminOverrides(),
+    ])
+
     events = all.filter(e =>
       member.category === 'צוות' ||
       e.categories.length === 0 ||
       e.categories.includes(member.category)
     )
+
+    const memberEmail = member.email.toLowerCase()
+    const memberName = `${member.firstName} ${member.lastName}`
+
+    // Build map from self-RSVPs
+    for (const r of allRsvps) {
+      if (r.email.toLowerCase() === memberEmail || r.name === memberName) {
+        rsvpMap[r.eventId] = r.attending.includes('✓') ? 'yes' : 'no'
+      }
+    }
+
+    // Admin overrides take precedence
+    for (const o of allOverrides) {
+      if (o.memberEmail.toLowerCase() === memberEmail) {
+        rsvpMap[o.eventId] = o.attending === 'מגיע' ? 'yes' : 'no'
+      }
+    }
   } catch (e) {
     console.error('Failed to load events:', e)
   }
@@ -57,7 +81,13 @@ export default async function EventsPage() {
           ) : (
             <div id="tour-events-list" className="space-y-8">
               {events.map((event, i) => (
-                <EventCard key={event.id} event={event} member={member} isFirst={i === 0} />
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  member={member}
+                  isFirst={i === 0}
+                  initialAttending={rsvpMap[event.id] ?? null}
+                />
               ))}
             </div>
           )}

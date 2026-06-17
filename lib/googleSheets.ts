@@ -95,7 +95,7 @@ export async function getEvents(): Promise<Event[]> {
     })
     .sort((a, b) => new Date(a[2]).getTime() - new Date(b[2]).getTime())
     .map((row) => ({
-      id:          row[0] || '',
+      id:          (row[0] || '').trim(),
       name:        row[1] || '',
       date:        row[2] || '',
       time:        row[3] || '',

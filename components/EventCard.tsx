@@ -59,10 +59,10 @@ function formatHebrewDate(dateStr: string): string {
   })
 }
 
-export default function EventCard({ event, member, isFirst }: { event: Event; member: Member; isFirst?: boolean }) {
+export default function EventCard({ event, member, isFirst, initialAttending }: { event: Event; member: Member; isFirst?: boolean; initialAttending?: 'yes' | 'no' | null }) {
   const [showForm, setShowForm] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [attending, setAttending] = useState<'yes' | 'no' | null>(null)
+  const [submitted, setSubmitted] = useState(initialAttending != null)
+  const [attending, setAttending] = useState<'yes' | 'no' | null>(initialAttending ?? null)
   const [loading, setLoading] = useState(false)
 
   const wazeUrl = `https://www.waze.com/ul?q=${encodeURIComponent(event.address || event.location)}&navigate=yes`
