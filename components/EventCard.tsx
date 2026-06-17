@@ -73,7 +73,7 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
     setLoading(true)
     setAttending(choice)
     try {
-      await fetch('/api/rsvp', {
+      const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -84,9 +84,11 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
           attending: choice,
         }),
       })
+      if (!res.ok) throw new Error('server error')
       setSubmitted(true)
     } catch {
       setAttending(null)
+      alert('שגיאה בשמירת האישור. אנא נסה שוב.')
     } finally {
       setLoading(false)
     }
