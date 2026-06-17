@@ -48,14 +48,18 @@ function computeStatus(
     adminName: override.adminName,
   }
 
-  const eventRSVPs = rsvps.filter(r => r.eventId === eventId)
-  const byEmail = eventRSVPs.find(r => norm(r.email).toLowerCase() === norm(member.email).toLowerCase())
+  const eventRSVPs = rsvps.filter(r => r.eventId.trim() === eventId.trim())
+  const memberName = norm(`${member.firstName} ${member.lastName}`)
+  const memberEmail = norm(member.email).toLowerCase()
+
+  // Use last RSVP per person (sheet is chronological, last = most recent)
+  const byEmail = [...eventRSVPs].reverse().find(r => norm(r.email).toLowerCase() === memberEmail)
   if (byEmail) return {
     attending: byEmail.attending.includes('מגיע') && !byEmail.attending.includes('לא'),
     source: 'email',
   }
 
-  const byName = eventRSVPs.find(r => norm(r.name) === norm(`${member.firstName} ${member.lastName}`))
+  const byName = [...eventRSVPs].reverse().find(r => norm(r.name) === memberName)
   if (byName) return {
     attending: byName.attending.includes('מגיע') && !byName.attending.includes('לא'),
     source: 'name',
