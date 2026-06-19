@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import DiamondPhotoBackground from '@/components/DiamondPhotoBackground'
 import SignIn from '@/components/SignIn'
 import AdminOverrideButton from '@/components/AdminOverrideButton'
+import AdminExportButton, { type ExportRow } from '@/components/AdminExportButton'
 import {
   getEvents, getMembers, getAllRSVPs, getAdminOverrides,
   type Member, type RSVPRecord, type AdminOverride,
@@ -152,6 +153,11 @@ export default async function AdminPage() {
 
             const totalAnswered = invitedMembers.filter(m => statuses.get(m.id)?.attending !== null).length
 
+            const exportRows: ExportRow[] = invitedMembers.map(m => {
+              const st = statuses.get(m.id)!
+              return { firstName: m.firstName, lastName: m.lastName, category: m.category, attending: st.attending, source: st.source, adminName: st.adminName }
+            })
+
             return (
               <div
                 key={event.id}
@@ -187,12 +193,15 @@ export default async function AdminPage() {
                       <h3 className="text-lg font-bold mb-1" style={{ color: '#F9FAFB' }}>{event.name}</h3>
                       <p className="text-sm" style={{ color: '#4B5563' }}>{formatHebrewDate(event.date)} | {event.time}</p>
                     </div>
-                    <span
-                      className="text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap"
-                      style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#6B7280' }}
-                    >
-                      {totalAnswered}/{invitedMembers.length} ענו
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap"
+                        style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#6B7280' }}
+                      >
+                        {totalAnswered}/{invitedMembers.length} ענו
+                      </span>
+                      <AdminExportButton eventName={event.name} eventDate={event.date} rows={exportRows} />
+                    </div>
                   </div>
 
                   {invitedCats.map(cat => {
