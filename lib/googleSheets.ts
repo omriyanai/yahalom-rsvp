@@ -89,11 +89,16 @@ export async function getEvents(): Promise<Event[]> {
 
   return rows
     .filter((row) => {
-      if (!row[0] || !row[2]) return false
+      if (!row[0]) return false
       if (row[7] === 'FALSE') return false
-      return new Date(row[2]) >= today
+      if (row[2] && new Date(row[2]) < today) return false
+      return true
     })
-    .sort((a, b) => new Date(a[2]).getTime() - new Date(b[2]).getTime())
+    .sort((a, b) => {
+      if (!a[2]) return 1   // no date → sort to end
+      if (!b[2]) return -1
+      return new Date(a[2]).getTime() - new Date(b[2]).getTime()
+    })
     .map((row) => ({
       id:          (row[0] || '').trim(),
       name:        row[1] || '',
