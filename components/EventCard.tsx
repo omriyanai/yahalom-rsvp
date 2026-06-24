@@ -214,8 +214,8 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
         </div>
         )}
 
-        {/* RSVP section */}
-        {submitted ? (
+        {/* RSVP section — only shown when date & time are known */}
+        {event.date && event.time && (submitted ? (
           <div
             className="rounded-xl p-5 text-center"
             style={{
@@ -239,7 +239,6 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
               boxShadow:  '0 0 32px rgba(196,18,48,0.3), 0 4px 16px rgba(196,18,48,0.2)',
             }}
           >
-            {/* Shimmer on hover */}
             <span
               className="absolute inset-0 opacity-0 group-hover:opacity-100"
               style={{
@@ -279,7 +278,7 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
               </button>
             </div>
           </div>
-        )}
+        ))}
 
       </div>
     </div>
