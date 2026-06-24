@@ -13,7 +13,7 @@ export default function Header({ member, showAdminLink }: { member?: Member; sho
         boxShadow:            '0 4px 32px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(196,18,48,0.15)',
       }}
     >
-      <div className="max-w-2xl mx-auto px-4 py-5 flex flex-col items-center gap-2">
+      <div className="max-w-2xl mx-auto px-4 py-5 flex flex-col items-center gap-0">
 
         {/* Logo — transparent PNG floats on dark */}
         <div className="relative">
@@ -28,12 +28,11 @@ export default function Header({ member, showAdminLink }: { member?: Member; sho
           <Image
             src="/logo2.png"
             alt="עמותת יהל״ם"
-            width={200}
-            height={88}
+            width={280}
+            height={120}
             style={{
               height:   'auto',
-              maxHeight:'80px',
-              width:    'auto',
+              width:    '260px',
               position: 'relative',
               filter:   'drop-shadow(0 2px 14px rgba(196,18,48,0.5)) drop-shadow(0 1px 4px rgba(0,0,0,0.9))',
             }}

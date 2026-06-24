@@ -66,7 +66,7 @@ export default function SignIn() {
 
             {/* ── Logo section ── */}
             <div className="flex flex-col items-center mb-10">
-              <div className="relative mb-6">
+              <div className="relative mb-2">
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
@@ -78,11 +78,11 @@ export default function SignIn() {
                 <Image
                   src="/logo2.png"
                   alt="עמותת יהל״ם"
-                  width={210}
-                  height={92}
+                  width={300}
+                  height={130}
                   style={{
-                    height: 'auto',
-                    width:  'auto',
+                    height:   'auto',
+                    width:    '320px',
                     position: 'relative',
                     filter:
                       'drop-shadow(0 2px 18px rgba(196,18,48,0.55)) drop-shadow(0 1px 5px rgba(0,0,0,0.95))',
