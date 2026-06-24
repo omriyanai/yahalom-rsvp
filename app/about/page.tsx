@@ -71,7 +71,7 @@ export default function AboutPage() {
         </div>
 
         <footer className="text-center text-xs pb-8 mt-4" style={{ color: '#374151' }}>
-          תוכנית מנטורינג עמותת יהלום © {new Date().getFullYear()}
+          תוכנית מנטורינג עמותת יהל״ם © {new Date().getFullYear()}
         </footer>
       </div>
     </main>

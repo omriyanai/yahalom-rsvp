@@ -77,7 +77,7 @@ export default function SignIn() {
                 />
                 <Image
                   src="/logo2.png"
-                  alt="עמותת יהלום"
+                  alt="עמותת יהל״ם"
                   width={210}
                   height={92}
                   style={{
@@ -190,7 +190,7 @@ export default function SignIn() {
                 <Lock size={12} style={{ color: '#374151' }} />
                 <p className="text-xs" style={{ color: '#4B5563' }}>רק מוזמנים רשומים יכולים להיכנס למערכת</p>
               </div>
-              <p className="text-[11px]" style={{ color: '#2D3748' }}>תוכנית מנטורינג עמותת יהלום © {new Date().getFullYear()}</p>
+              <p className="text-[11px]" style={{ color: '#2D3748' }}>תוכנית מנטורינג עמותת יהל״ם © {new Date().getFullYear()}</p>
             </div>
 
           </div>{/* /card inner */}

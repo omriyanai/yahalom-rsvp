@@ -34,8 +34,8 @@ const PARTICLES: { left: string; size: number; dur: number; delay: number; opaci
 ]
 
 export const metadata: Metadata = {
-  title: 'עמותת יהלום — אישור הגעה',
-  description: 'מערכת אישור הגעה לאירועי עמותת יהלום',
+  title: 'עמותת יהל״ם — אישור הגעה',
+  description: 'מערכת אישור הגעה לאירועי עמותת יהל״ם',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
