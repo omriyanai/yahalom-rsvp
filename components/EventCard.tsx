@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { CalendarDays, Clock, MapPin, MessageSquare, CalendarPlus, CalendarRange, Navigation2, Check, X } from 'lucide-react'
 import type { Event, Member } from '@/lib/googleSheets'
 
-function getEndTime(event: Event): { compact: string; iso: string } {
+function getEndTime(event: Event): { compact: string; iso: string } | null {
+  if (!event.date || !event.time) return null
   const [h, m] = event.time.split(':')
   if (event.endtime && event.endtime.includes(':')) {
     const [eh, em] = event.endtime.split(':')
@@ -20,32 +21,36 @@ function getEndTime(event: Event): { compact: string; iso: string } {
   }
 }
 
-function buildGoogleCalendarUrl(event: Event): string {
+function buildGoogleCalendarUrl(event: Event): string | null {
+  if (!event.date || !event.time) return null
   const dateClean = event.date.replace(/-/g, '')
   const [h, m] = event.time.split(':')
   const start = `${dateClean}T${h}${m}00`
-  const { compact: end } = getEndTime(event)
+  const end = getEndTime(event)
+  if (!end) return null
   return (
     `https://calendar.google.com/calendar/render?action=TEMPLATE` +
     `&text=${encodeURIComponent(event.name)}` +
-    `&dates=${start}/${end}` +
-    `&location=${encodeURIComponent(event.address || event.location)}` +
-    `&details=${encodeURIComponent(event.description)}` +
+    `&dates=${start}/${end.compact}` +
+    `&location=${encodeURIComponent(event.address || event.location || '')}` +
+    `&details=${encodeURIComponent(event.description || '')}` +
     `&ctz=Asia%2FJerusalem`
   )
 }
 
-function buildOutlookCalendarUrl(event: Event): string {
+function buildOutlookCalendarUrl(event: Event): string | null {
+  if (!event.date || !event.time) return null
   const [h, m] = event.time.split(':')
   const startIso = `${event.date}T${h}:${m}:00`
-  const { iso: endIso } = getEndTime(event)
+  const end = getEndTime(event)
+  if (!end) return null
   return (
     `https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent` +
     `&subject=${encodeURIComponent(event.name)}` +
     `&startdt=${encodeURIComponent(startIso)}` +
-    `&enddt=${encodeURIComponent(endIso)}` +
-    `&location=${encodeURIComponent(event.address || event.location)}` +
-    `&body=${encodeURIComponent(event.description)}`
+    `&enddt=${encodeURIComponent(end.iso)}` +
+    `&location=${encodeURIComponent(event.address || event.location || '')}` +
+    `&body=${encodeURIComponent(event.description || '')}`
   )
 }
 
@@ -65,7 +70,9 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
   const [attending, setAttending] = useState<'yes' | 'no' | null>(initialAttending ?? null)
   const [loading, setLoading] = useState(false)
 
-  const wazeUrl = `https://www.waze.com/ul?q=${encodeURIComponent(event.address || event.location)}&navigate=yes`
+  const wazeUrl = (event.address || event.location)
+    ? `https://www.waze.com/ul?q=${encodeURIComponent(event.address || event.location)}&navigate=yes`
+    : null
   const googleCalendarUrl = buildGoogleCalendarUrl(event)
   const outlookCalendarUrl = buildOutlookCalendarUrl(event)
 
@@ -127,18 +134,24 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
 
         {/* Event details */}
         <div className="space-y-2.5 mb-6 text-[15px]" style={{ color: '#9CA3AF' }}>
-          <div className="flex items-center gap-3">
-            <CalendarDays size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
-            <span className="font-medium">{formatHebrewDate(event.date)}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Clock size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
-            <span>{event.time}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <MapPin size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
-            <span>{event.location}</span>
-          </div>
+          {event.date && (
+            <div className="flex items-center gap-3">
+              <CalendarDays size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
+              <span className="font-medium">{formatHebrewDate(event.date)}</span>
+            </div>
+          )}
+          {event.time && (
+            <div className="flex items-center gap-3">
+              <Clock size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
+              <span>{event.time}</span>
+            </div>
+          )}
+          {event.location && (
+            <div className="flex items-center gap-3">
+              <MapPin size={16} className="flex-shrink-0" style={{ color: '#C41230' }} />
+              <span>{event.location}</span>
+            </div>
+          )}
           {event.description && (
             <div className="flex items-start gap-3 mt-1">
               <MessageSquare size={15} className="flex-shrink-0 mt-0.5" style={{ color: 'rgba(196,18,48,0.55)' }} />
@@ -147,8 +160,10 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
           )}
         </div>
 
-        {/* Navigation & calendar buttons */}
+        {/* Navigation & calendar buttons — only shown when relevant data exists */}
+        {(wazeUrl || googleCalendarUrl || outlookCalendarUrl) && (
         <div className="flex flex-wrap gap-2.5 mb-5">
+          {wazeUrl && (
           <a
             href={wazeUrl}
             target="_blank"
@@ -163,6 +178,8 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
             <Navigation2 size={14} />
             ניווט ב-Waze
           </a>
+          )}
+          {googleCalendarUrl && (
           <a
             href={googleCalendarUrl}
             target="_blank"
@@ -177,6 +194,8 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
             <CalendarPlus size={14} />
             Google Calendar
           </a>
+          )}
+          {outlookCalendarUrl && (
           <a
             href={outlookCalendarUrl}
             target="_blank"
@@ -191,7 +210,9 @@ export default function EventCard({ event, member, isFirst, initialAttending }: 
             <CalendarRange size={14} />
             Outlook
           </a>
+          )}
         </div>
+        )}
 
         {/* RSVP section */}
         {submitted ? (
