@@ -26,7 +26,7 @@ export default function Header({ member, showAdminLink }: { member?: Member; sho
             }}
           />
           <Image
-            src="/Logo.png"
+            src="/logo2.png"
             alt="עמותת יהלום"
             width={200}
             height={88}

@@ -76,7 +76,7 @@ export default function SignIn() {
                   }}
                 />
                 <Image
-                  src="/Logo.png"
+                  src="/logo2.png"
                   alt="עמותת יהלום"
                   width={210}
                   height={92}
